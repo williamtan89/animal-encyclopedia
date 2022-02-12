@@ -3,8 +3,8 @@ package com.williamtan.domain.di
 import com.williamtan.domain.repository.CatRepository
 import com.williamtan.domain.usecase.GetRecentBreedsImpl
 import com.williamtan.domain.usecase.SearchBreedsByNameImpl
-import com.williamtan.commonlogic.usecase.GetRecentBreeds
-import com.williamtan.commonlogic.usecase.SearchBreedsByName
+import com.williamtan.usecase.GetRecentBreeds
+import com.williamtan.usecase.SearchBreedsByName
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

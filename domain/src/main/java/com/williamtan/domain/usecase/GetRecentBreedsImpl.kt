@@ -1,9 +1,9 @@
 package com.williamtan.domain.usecase
 
+import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.common.model.BreedEntity
 import com.williamtan.domain.repository.CatRepository
-import com.williamtan.commonlogic.usecase.GetRecentBreeds
-import com.williamtan.domain.enumtype.AnimalType
+import com.williamtan.usecase.GetRecentBreeds
 import kotlinx.coroutines.flow.Flow
 
 class GetRecentBreedsImpl(
