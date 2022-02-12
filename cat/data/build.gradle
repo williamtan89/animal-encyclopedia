@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'kotlin'
+    id 'kotlin-kapt'
 }
 
 java {
@@ -10,9 +11,23 @@ java {
 
 dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.google.dagger:hilt-core:2.40.5'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+
+    // moshi
+    implementation 'com.squareup.moshi:moshi:1.13.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.13.0'
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+
+    implementation 'com.google.dagger:hilt-core:2.40.5'
+    kapt 'com.google.dagger:hilt-compiler:2.40.5'
 
     implementation project(':domain')
     implementation project(':common')
+}
+
+kapt {
+    correctErrorTypes = true
 }

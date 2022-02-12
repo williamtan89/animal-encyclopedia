@@ -7,7 +7,9 @@ import retrofit2.http.Query
 interface CatApi {
     @GET("v1/breeds")
     suspend fun searchByBreed(
-        @Query("breed_ids", encoded = true) breedIds: String?
+        @Query("breed_ids", encoded = true) breedIds: String?,
+        @Query("limit") limit: Int,
+        @Query("page") page: Int
     ): List<BreedModel>
 
     @GET("v1/breeds/search")
