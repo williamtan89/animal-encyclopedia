@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.HomeActivity">
+    tools:context=".promoted.PromotedFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_home"
+        android:id="@+id/rv_promoted"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/list_item_home" />
+        tools:listitem="@layout/list_item_promoted_breeds" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_empty_state"
