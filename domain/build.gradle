@@ -1,0 +1,18 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation 'com.google.dagger:hilt-core:2.40.5'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+
+    implementation project(':cat:data')
+    implementation project(':usecase')
+    implementation project(':common')
+}
