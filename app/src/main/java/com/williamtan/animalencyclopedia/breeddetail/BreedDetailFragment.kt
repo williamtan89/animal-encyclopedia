@@ -1,5 +1,7 @@
 package com.williamtan.animalencyclopedia.breeddetail
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -102,7 +104,7 @@ class BreedDetailFragment : Fragment() {
             .load(breed.imageUrl)
             .into(binding.ivToolbar)
 
-        if(!breed.isFavorite) {
+        if (!breed.isFavorite) {
             binding.btnFavorite.text = "ADD TO FAVORITE"
         } else {
             binding.btnFavorite.text = "REMOVE FROM FAVORITE"
@@ -112,6 +114,14 @@ class BreedDetailFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.onFavoriteButtonClick(breed)
             }
+        }
+
+        binding.btnReadMore.isVisible = !breed.wikipediaUrl.isNullOrBlank()
+        binding.btnReadMore.setOnClickListener {
+            val defaultBrowser =
+                Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
+            defaultBrowser.data = Uri.parse(breed.wikipediaUrl)
+            startActivity(defaultBrowser)
         }
     }
 }
