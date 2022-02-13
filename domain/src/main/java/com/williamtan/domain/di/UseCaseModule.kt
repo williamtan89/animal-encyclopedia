@@ -1,6 +1,7 @@
 package com.williamtan.domain.di
 
 import com.williamtan.domain.repository.CatRepository
+import com.williamtan.domain.repository.DogRepository
 import com.williamtan.domain.repository.FavoriteRepository
 import com.williamtan.domain.usecase.animaltype.GetAnimalTypeList
 import com.williamtan.domain.usecase.animaltype.GetAnimalTypeWithPromotedBreeds
@@ -22,14 +23,16 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideGetAnimalTypeWithPromotedBreeds(
-        catRepository: CatRepository
-    ) = GetAnimalTypeWithPromotedBreeds(catRepository)
+        catRepository: CatRepository,
+        dogRepository: DogRepository
+    ) = GetAnimalTypeWithPromotedBreeds(catRepository, dogRepository)
 
     @Provides
     @Singleton
     fun provideSearchBreedsByName(
-        catRepository: CatRepository
-    ) = SearchBreedsByName(catRepository)
+        catRepository: CatRepository,
+        dogRepository: DogRepository
+    ) = SearchBreedsByName(catRepository, dogRepository)
 
     @Provides
     @Singleton
@@ -38,15 +41,17 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideGetBreeds(
-        catRepository: CatRepository
-    ) = GetBreeds(catRepository)
+        catRepository: CatRepository,
+        dogRepository: DogRepository
+    ) = GetBreeds(catRepository, dogRepository)
 
     @Provides
     @Singleton
     fun provideGetBreedById(
         catRepository: CatRepository,
+        dogRepository: DogRepository,
         favoriteRepository: FavoriteRepository
-    ) = GetBreedById(catRepository, favoriteRepository)
+    ) = GetBreedById(catRepository, dogRepository, favoriteRepository)
 
     @Provides
     @Singleton

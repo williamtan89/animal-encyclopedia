@@ -3,12 +3,14 @@ package com.williamtan.domain.usecase.breed
 import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.repository.CatRepository
+import com.williamtan.domain.repository.DogRepository
 import com.williamtan.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 class GetBreedById(
     private val catRepository: CatRepository,
+    private val dogRepository: DogRepository,
     private val favoriteRepository: FavoriteRepository
 ) {
     suspend operator fun invoke(
@@ -17,6 +19,14 @@ class GetBreedById(
     ): Flow<BreedEntity?> = when (animalType) {
         AnimalType.Cat -> {
             catRepository.getCatBreedById(breedId)
+                .combine(favoriteRepository.isBreedFavorite(breedId)) { breed, isFavorite ->
+                    breed?.copy(
+                        isFavorite = isFavorite
+                    )
+                }
+        }
+        AnimalType.Dog -> {
+            dogRepository.getDogBreedById(breedId)
                 .combine(favoriteRepository.isBreedFavorite(breedId)) { breed, isFavorite ->
                     breed?.copy(
                         isFavorite = isFavorite

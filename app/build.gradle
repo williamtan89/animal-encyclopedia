@@ -65,6 +65,7 @@ dependencies {
     implementation project(':common')
     implementation project(':domain')
     implementation project(':cat:data')
+    implementation project(':dog:data')
     implementation project(':favorite:data')
 
     // test

@@ -3,7 +3,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 rootProject.name = "AnimalEncyclopedia"
@@ -11,4 +10,6 @@ include ':app'
 include ':domain'
 include ':common'
 include ':cat:data'
+include ':dog:data'
 include ':favorite:data'
+include ':network'

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 class GetAnimalTypeList {
     suspend operator fun invoke(): Flow<List<AnimalType>> = flow {
         emit(
-            listOf(AnimalType.Cat)
+            listOf(AnimalType.Cat, AnimalType.Dog)
         )
     }
 }

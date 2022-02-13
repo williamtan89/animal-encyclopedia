@@ -1,7 +1,7 @@
-package com.williamtan.cat.data.di
+package com.williamtan.dog.data.di
 
 import com.squareup.moshi.Moshi
-import com.williamtan.cat.data.CatApi
+import com.williamtan.dog.data.DogApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,13 +16,13 @@ import javax.inject.Singleton
 object ApiModule {
     @Provides
     @Singleton
-    fun provideCatApi(
+    fun provideDogApi(
         okHttpClient: OkHttpClient,
         moshi: Moshi
-    ): CatApi = Retrofit.Builder()
+    ): DogApi = Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl("https://api.thecatapi.com/")
+        .baseUrl("https://api.thedogapi.com/")
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
-        .create(CatApi::class.java)
+        .create(DogApi::class.java)
 }
