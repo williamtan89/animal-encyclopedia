@@ -17,10 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            app:searchHintIcon="@null"
-            app:searchIcon="@null"
             app:iconifiedByDefault="false"
-            app:queryHint="Search breed" />
+            app:queryHint="Search breed"
+            app:searchHintIcon="@null"
+            app:searchIcon="@null" />
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,39 +36,5 @@
         app:spanCount="2"
         tools:listitem="@layout/list_item_breed" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_empty_state"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_breed">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="All animal is hibernating, please try again later!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_error_state"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tb_breed">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="All animal has escaped! We are catching them all!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/common_screen_state" />
 </androidx.constraintlayout.widget.ConstraintLayout>

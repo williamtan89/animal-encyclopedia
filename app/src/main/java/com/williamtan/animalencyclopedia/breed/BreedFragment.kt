@@ -16,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.adapter.BreedAdapter
+import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedBinding
 import com.williamtan.animalencyclopedia.view.GridItemDecoration
 import com.williamtan.common.enumtype.AnimalType
@@ -30,6 +31,7 @@ class BreedFragment : Fragment() {
     private val args: BreedFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentBreedBinding
+    private lateinit var stateBinding: CommonScreenStateBinding
     private lateinit var adapter: BreedAdapter
 
     override fun onCreateView(
@@ -38,6 +40,7 @@ class BreedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBreedBinding.inflate(inflater)
+        stateBinding = CommonScreenStateBinding.bind(binding.root)
 
         return binding.root
     }
@@ -102,18 +105,27 @@ class BreedFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is BreedViewModel.ScreenState.Empty -> {
-                            binding.layoutEmptyState.isVisible = true
-                            binding.layoutErrorState.isVisible = false
+                            stateBinding.layoutEmptyState.isVisible = true
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
                         }
 
                         is BreedViewModel.ScreenState.Error -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = true
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = true
+                            stateBinding.layoutLoadingState.isVisible = false
                         }
 
-                        else -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = false
+                        is BreedViewModel.ScreenState.Loading -> {
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = true
+                        }
+
+                        is BreedViewModel.ScreenState.Success -> {
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
                         }
                     }
                 }

@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.williamtan.animalencyclopedia.adapter.PromotedBreedsAdapter
+import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentPromotedBinding
 import com.williamtan.animalencyclopedia.home.HomeFragmentDirections
 import com.williamtan.common.enumtype.AnimalType
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 class PromotedFragment : Fragment() {
     private val viewModel: PromotedViewModel by viewModels()
     private lateinit var binding: FragmentPromotedBinding
+    private lateinit var stateBinding: CommonScreenStateBinding
     private lateinit var adapter: PromotedBreedsAdapter
 
     override fun onCreateView(
@@ -30,6 +32,7 @@ class PromotedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPromotedBinding.inflate(layoutInflater)
+        stateBinding = CommonScreenStateBinding.bind(binding.root)
 
         return binding.root
     }
@@ -45,18 +48,27 @@ class PromotedFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is PromotedViewModel.ScreenState.Empty -> {
-                            binding.layoutEmptyState.isVisible = true
-                            binding.layoutErrorState.isVisible = false
+                            stateBinding.layoutEmptyState.isVisible = true
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
                         }
 
                         is PromotedViewModel.ScreenState.Error -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = true
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = true
+                            stateBinding.layoutLoadingState.isVisible = false
+                        }
+
+                        is PromotedViewModel.ScreenState.Loading -> {
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = true
                         }
 
                         is PromotedViewModel.ScreenState.Success -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = false
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
                         }
                     }
                 }

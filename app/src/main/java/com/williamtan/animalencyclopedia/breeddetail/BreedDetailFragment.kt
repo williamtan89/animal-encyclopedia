@@ -16,6 +16,8 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.williamtan.animalencyclopedia.R
+import com.williamtan.animalencyclopedia.breed.BreedViewModel
+import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedDetailBinding
 import com.williamtan.common.entity.BreedEntity
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +31,7 @@ class BreedDetailFragment : Fragment() {
 
     private val viewModel: BreedDetailViewModel by viewModels()
     private lateinit var binding: FragmentBreedDetailBinding
+    private lateinit var stateBinding: CommonScreenStateBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +39,7 @@ class BreedDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBreedDetailBinding.inflate(inflater)
+        stateBinding = CommonScreenStateBinding.bind(binding.root)
 
         return binding.root
     }
@@ -56,18 +60,27 @@ class BreedDetailFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is BreedDetailViewModel.ScreenState.Empty -> {
-                            binding.layoutEmptyState.isVisible = true
-                            binding.layoutErrorState.isVisible = false
+                            stateBinding.layoutEmptyState.isVisible = true
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
                         }
 
                         is BreedDetailViewModel.ScreenState.Error -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = true
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = true
+                            stateBinding.layoutLoadingState.isVisible = false
+                        }
+
+                        is BreedDetailViewModel.ScreenState.Loading -> {
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = true
                         }
 
                         is BreedDetailViewModel.ScreenState.Success -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = false
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
 
                             updateUi(it.breed)
                         }

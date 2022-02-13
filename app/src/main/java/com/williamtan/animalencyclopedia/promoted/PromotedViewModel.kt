@@ -9,6 +9,7 @@ import com.williamtan.domain.usecase.animaltype.GetAnimalTypeWithPromotedBreeds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,6 +28,7 @@ class PromotedViewModel @Inject constructor(
     }
 
     private suspend fun loadAnimalType() = getAnimalTypeList()
+        .onStart { uiState.emit(ScreenState.Loading) }
         .catch {
             it.printStackTrace()
             uiState.emit(ScreenState.Error(it.stackTraceToString()))
@@ -61,6 +63,7 @@ class PromotedViewModel @Inject constructor(
         }
 
     sealed class ScreenState {
+        object Loading : ScreenState()
         object Empty : ScreenState()
         data class Error(val error: String) : ScreenState()
         object Success : ScreenState()

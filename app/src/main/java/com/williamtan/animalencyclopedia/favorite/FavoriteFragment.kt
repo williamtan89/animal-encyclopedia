@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.adapter.BreedAdapter
+import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentFavoriteBinding
 import com.williamtan.animalencyclopedia.home.HomeFragmentDirections
 import com.williamtan.animalencyclopedia.view.GridItemDecoration
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 class FavoriteFragment : Fragment() {
     private val viewModel: FavoriteViewModel by viewModels()
     private lateinit var binding: FragmentFavoriteBinding
+    private lateinit var stateBinding: CommonScreenStateBinding
     private lateinit var adapter: BreedAdapter
 
     override fun onCreateView(
@@ -33,6 +35,7 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFavoriteBinding.inflate(inflater)
+        stateBinding = CommonScreenStateBinding.bind(binding.root)
 
         return binding.root
     }
@@ -46,18 +49,27 @@ class FavoriteFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is FavoriteViewModel.ScreenState.Empty -> {
-                            binding.layoutEmptyState.isVisible = true
-                            binding.layoutErrorState.isVisible = false
+                            stateBinding.layoutEmptyState.isVisible = true
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
                         }
 
                         is FavoriteViewModel.ScreenState.Error -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = true
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = true
+                            stateBinding.layoutLoadingState.isVisible = false
+                        }
+
+                        is FavoriteViewModel.ScreenState.Loading -> {
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = true
                         }
 
                         is FavoriteViewModel.ScreenState.Success -> {
-                            binding.layoutEmptyState.isVisible = false
-                            binding.layoutErrorState.isVisible = false
+                            stateBinding.layoutEmptyState.isVisible = false
+                            stateBinding.layoutErrorState.isVisible = false
+                            stateBinding.layoutLoadingState.isVisible = false
 
                             updateUi(it.favoriteList)
                         }
