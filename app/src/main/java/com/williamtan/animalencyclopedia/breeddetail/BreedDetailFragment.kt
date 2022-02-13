@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
@@ -115,6 +116,7 @@ class BreedDetailFragment : Fragment() {
         Glide.with(this)
             .load(breed.imageUrl)
             .placeholder(R.drawable.ic_placeholder_48)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.ivToolbar)
 
         if (!breed.isFavorite) {

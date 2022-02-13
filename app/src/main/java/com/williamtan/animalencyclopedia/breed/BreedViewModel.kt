@@ -57,6 +57,7 @@ class BreedViewModel @Inject constructor(
 
     suspend fun loadBreeds(animalType: AnimalType) {
         if (reachedEnd) return
+        if (uiState.value is ScreenState.Loading) return
 
         getBreeds(animalType, currentPage)
             .onStart { uiState.emit(ScreenState.Loading) }

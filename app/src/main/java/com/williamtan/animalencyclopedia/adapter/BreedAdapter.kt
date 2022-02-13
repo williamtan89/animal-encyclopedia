@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.databinding.ListItemBreedBinding
 import com.williamtan.common.entity.BreedEntity
@@ -41,6 +42,7 @@ class BreedViewHolder(
         Glide.with(binding.root)
             .load(item.imageUrl)
             .placeholder(R.drawable.ic_placeholder_48)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.ivBreed)
 
         binding.cvRoot.setOnClickListener {
