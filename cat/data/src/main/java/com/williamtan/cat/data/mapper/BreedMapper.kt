@@ -12,9 +12,13 @@ interface BreedMapper {
 internal class BreedMapperImpl(
     private val animalType: AnimalType
 ) : BreedMapper {
+    companion object {
+        const val ALTERNATIVE_IMAGE_URL = "https://cdn2.thecatapi.com/images/%s.jpg"
+    }
+
     override fun mapTo(model: BreedModel): BreedEntity {
         val imageUrl = model.image?.url ?: if (!model.referenceImageId.isNullOrBlank()) {
-            "https://cdn2.thecatapi.com/images/${model.referenceImageId}.jpg"
+            ALTERNATIVE_IMAGE_URL.format(model.referenceImageId)
         } else null
 
         return BreedEntity(
