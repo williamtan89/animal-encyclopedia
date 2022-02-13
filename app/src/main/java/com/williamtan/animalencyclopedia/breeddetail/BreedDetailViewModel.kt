@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.usecase.GetBreedById
+import com.williamtan.domain.usecase.favorite.AddBreedToFavorite
+import com.williamtan.domain.usecase.favorite.RemoveBreedFromFavorite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -15,6 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BreedDetailViewModel @Inject constructor(
     private val getBreedById: GetBreedById,
+    private val addBreedToFavorite: AddBreedToFavorite,
+    private val removeBreedFromFavorite: RemoveBreedFromFavorite,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
@@ -27,6 +31,14 @@ class BreedDetailViewModel @Inject constructor(
             if (breedId != null && animalType != null) {
                 loadBreedDetail(animalType, breedId)
             }
+        }
+    }
+
+    suspend fun onFavoriteButtonClick(breed: BreedEntity) {
+        if (breed.isFavorite) {
+            removeBreedFromFavorite.invoke(breed.id)
+        } else {
+            addBreedToFavorite.invoke(breed)
         }
     }
 

@@ -10,5 +10,6 @@ data class BreedEntity(
     val temperament: List<String>,
     val wikipediaUrl: String?,
     val energyLevel: Int,
-    val description: String
+    val description: String,
+    val isFavorite: Boolean = false
 )

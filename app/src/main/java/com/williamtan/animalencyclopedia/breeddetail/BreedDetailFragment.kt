@@ -19,7 +19,6 @@ import com.williamtan.common.entity.BreedEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
 class BreedDetailFragment : Fragment() {
     companion object {
@@ -79,9 +78,10 @@ class BreedDetailFragment : Fragment() {
     private fun updateUi(breed: BreedEntity) {
         binding.tvBreedId.text = resources.getString(R.string.breed_detail_id, breed.id.uppercase())
         binding.tvBreedName.text = breed.name
-
         binding.tvBreedDesc.text = breed.description
 
+        // clear existing chips, if any
+        binding.cgTemperament.removeAllViews()
         breed.temperament.forEach { t ->
             val newChip = Chip(context).apply {
                 text = t
@@ -96,11 +96,22 @@ class BreedDetailFragment : Fragment() {
             R.string.breed_detail_energy_level,
             breed.energyLevel
         )
-
         binding.pbEnergyLevel.progress = (breed.energyLevel / MAXIMUM_ENERGY_LEVEL * 100).toInt()
 
         Glide.with(this)
             .load(breed.imageUrl)
             .into(binding.ivToolbar)
+
+        if(!breed.isFavorite) {
+            binding.btnFavorite.text = "ADD TO FAVORITE"
+        } else {
+            binding.btnFavorite.text = "REMOVE FROM FAVORITE"
+        }
+
+        binding.btnFavorite.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.onFavoriteButtonClick(breed)
+            }
+        }
     }
 }

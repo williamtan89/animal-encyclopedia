@@ -64,6 +64,7 @@ dependencies {
     implementation project(':common')
     implementation project(':domain')
     implementation project(':cat:data')
+    implementation project(':favorite:data')
 
     // test
     testImplementation 'junit:junit:4.+'
