@@ -26,6 +26,11 @@ dependencies {
     implementation project(':network')
     implementation project(':domain')
     implementation project(':common')
+
+    // test
+    testImplementation 'junit:junit:4.+'
+    testImplementation "io.mockk:mockk:1.12.2"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
 }
 
 kapt {
