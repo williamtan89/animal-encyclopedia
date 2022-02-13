@@ -9,5 +9,6 @@ data class BreedEntity(
     val animalType: AnimalType,
     val temperament: List<String>,
     val wikipediaUrl: String,
-    val energyLevel: Int
+    val energyLevel: Int,
+    val description: String
 )

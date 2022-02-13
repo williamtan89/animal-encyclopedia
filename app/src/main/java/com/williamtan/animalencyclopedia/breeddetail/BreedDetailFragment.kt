@@ -11,16 +11,22 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
+import com.google.android.material.chip.Chip
 import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedDetailBinding
+import com.williamtan.common.entity.BreedEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class BreedDetailFragment : Fragment() {
-    private val viewModel: BreedDetailViewModel by viewModels()
+    companion object {
+        private const val MAXIMUM_ENERGY_LEVEL = 5.0f
+    }
 
+    private val viewModel: BreedDetailViewModel by viewModels()
     private lateinit var binding: FragmentBreedDetailBinding
 
     override fun onCreateView(
@@ -62,13 +68,39 @@ class BreedDetailFragment : Fragment() {
                             binding.layoutEmptyState.isVisible = false
                             binding.layoutErrorState.isVisible = false
 
-                            with(it.breed) {
-                                binding.tvBreedName.text = this.toString()
-                            }
+                            updateUi(it.breed)
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun updateUi(breed: BreedEntity) {
+        binding.tvBreedId.text = resources.getString(R.string.breed_detail_id, breed.id.uppercase())
+        binding.tvBreedName.text = breed.name
+
+        binding.tvBreedDesc.text = breed.description
+
+        breed.temperament.forEach { t ->
+            val newChip = Chip(context).apply {
+                text = t
+                setEnsureMinTouchTargetSize(false)
+                isClickable = false
+            }
+
+            binding.cgTemperament.addView(newChip)
+        }
+
+        binding.tvEnergyLevel.text = resources.getString(
+            R.string.breed_detail_energy_level,
+            breed.energyLevel
+        )
+
+        binding.pbEnergyLevel.progress = (breed.energyLevel / MAXIMUM_ENERGY_LEVEL * 100).toInt()
+
+        Glide.with(this)
+            .load(breed.imageUrl)
+            .into(binding.ivToolbar)
     }
 }

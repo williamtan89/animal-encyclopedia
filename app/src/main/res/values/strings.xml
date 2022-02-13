@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AnimalEncyclopedia</string>
+    <string name="breed_detail_id">No. %s</string>
+    <string name="breed_detail_energy_level">Level %d</string>
 </resources>
