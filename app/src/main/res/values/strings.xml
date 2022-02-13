@@ -6,8 +6,10 @@
     <string name="tab_home">Home</string>
     <string name="tab_favorite">Favorite</string>
 
+    <string name="read_more">Read more</string>
     <string name="add_to_favorite">Add to favorite</string>
     <string name="remove_from_favorite">Remove from favorite</string>
-    <string name="error_state">All animal is hibernating, please try again later!</string>
-    <string name="empty_state">All animal is hibernating, please try again later!</string>
+    <string name="error_state">…Meow? (Where is my food)</string>
+    <string name="empty_state">Meow meow (Nothing to see here)</string>
+    <string name="loading_state">Meow meow (Meow)</string>
 </resources>

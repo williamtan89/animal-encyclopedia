@@ -16,7 +16,6 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
 import com.williamtan.animalencyclopedia.R
-import com.williamtan.animalencyclopedia.breed.BreedViewModel
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedDetailBinding
 import com.williamtan.common.entity.BreedEntity
@@ -115,6 +114,7 @@ class BreedDetailFragment : Fragment() {
 
         Glide.with(this)
             .load(breed.imageUrl)
+            .placeholder(R.drawable.ic_placeholder_48)
             .into(binding.ivToolbar)
 
         if (!breed.isFavorite) {

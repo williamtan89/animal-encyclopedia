@@ -26,6 +26,7 @@ class BreedViewModel @Inject constructor(
     val searchQuery = MutableSharedFlow<String?>()
 
     private var currentPage = 0
+    private var reachedEnd = false
 
     init {
         viewModelScope.launch {
@@ -37,6 +38,7 @@ class BreedViewModel @Inject constructor(
 
     suspend fun searchBreedByName(animalType: AnimalType, query: String) {
         currentPage = 0
+        reachedEnd = false
 
         searchBreedsByName(animalType, query)
             .onStart { uiState.emit(ScreenState.Loading) }
@@ -54,6 +56,8 @@ class BreedViewModel @Inject constructor(
     }
 
     suspend fun loadBreeds(animalType: AnimalType) {
+        if (reachedEnd) return
+
         getBreeds(animalType, currentPage)
             .onStart { uiState.emit(ScreenState.Loading) }
             .catch {
@@ -63,6 +67,7 @@ class BreedViewModel @Inject constructor(
                 if (breedEntityData.value.isEmpty() && breeds.isEmpty()) {
                     uiState.emit(ScreenState.Empty)
                 } else {
+                    reachedEnd = breeds.isEmpty()
                     uiState.emit(ScreenState.Success)
                     breedEntityData.emit(breedEntityData.value + breeds)
                     currentPage++

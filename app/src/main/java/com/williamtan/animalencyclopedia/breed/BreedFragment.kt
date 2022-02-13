@@ -119,7 +119,8 @@ class BreedFragment : Fragment() {
                         is BreedViewModel.ScreenState.Loading -> {
                             stateBinding.layoutEmptyState.isVisible = false
                             stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = true
+                            stateBinding.layoutLoadingState.isVisible =
+                                viewModel.breedEntityData.value.isEmpty()
                         }
 
                         is BreedViewModel.ScreenState.Success -> {
