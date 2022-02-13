@@ -93,6 +93,8 @@ class BreedDetailFragment : Fragment() {
     private fun updateUi(breed: BreedEntity) {
         binding.tvBreedId.text = resources.getString(R.string.breed_detail_id, breed.id.uppercase())
         binding.tvBreedName.text = breed.name
+
+        binding.tvBreedDesc.isVisible = breed.description.isNotBlank()
         binding.tvBreedDesc.text = breed.description
 
         // clear existing chips, if any
@@ -107,6 +109,7 @@ class BreedDetailFragment : Fragment() {
             binding.cgTemperament.addView(newChip)
         }
 
+        binding.layoutEnergy.isVisible = breed.energyLevel > 0
         binding.tvEnergyLevel.text = resources.getString(
             R.string.breed_detail_energy_level,
             breed.energyLevel
