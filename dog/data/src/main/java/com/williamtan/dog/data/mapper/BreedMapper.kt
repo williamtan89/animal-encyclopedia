@@ -1,8 +1,8 @@
 package com.williamtan.dog.data.mapper
 
-import com.williamtan.dog.data.model.BreedModel
 import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType
+import com.williamtan.dog.data.model.BreedModel
 
 interface BreedMapper {
     fun mapTo(model: BreedModel): BreedEntity
@@ -12,9 +12,13 @@ interface BreedMapper {
 internal class BreedMapperImpl(
     private val animalType: AnimalType
 ) : BreedMapper {
+    companion object {
+        const val ALTERNATIVE_IMAGE_URL = "https://cdn2.thedogapi.com/images/%s.jpg"
+    }
+
     override fun mapTo(model: BreedModel): BreedEntity {
         val imageUrl = model.image?.url ?: if (!model.referenceImageId.isNullOrBlank()) {
-            "https://cdn2.thedogapi.com/images/${model.referenceImageId}.jpg"
+            ALTERNATIVE_IMAGE_URL.format(model.referenceImageId)
         } else null
 
         return BreedEntity(
@@ -22,7 +26,7 @@ internal class BreedMapperImpl(
             name = model.name,
             imageUrl = imageUrl,
             animalType = animalType,
-            temperamentList = model.temperament.split(",").map { it.trim() },
+            temperamentList = model.temperament?.split(",")?.map { it.trim() } ?: emptyList(),
             wikipediaUrl = model.wikipediaUrl,
             energyLevel = model.energyLevel ?: 0,
             description = model.description ?: ""

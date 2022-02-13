@@ -141,17 +141,6 @@ class BreedFragment : Fragment() {
                 }
             }
         }
-
-        // start collecting search query with debounce
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchQuery.debounce(500).collect { q ->
-                    q?.let {
-                        viewModel.searchBreedByName(args.animalType, q)
-                    }
-                }
-            }
-        }
     }
 
     private val onBreedClick: (AnimalType, String) -> Unit = { animalType, breedId ->

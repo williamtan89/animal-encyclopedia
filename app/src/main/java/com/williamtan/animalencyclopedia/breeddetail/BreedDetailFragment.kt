@@ -98,6 +98,7 @@ class BreedDetailFragment : Fragment() {
         binding.tvBreedDesc.text = breed.description
 
         // clear existing chips, if any
+        binding.layoutTemperament.isVisible = breed.temperamentList.isNotEmpty()
         binding.cgTemperament.removeAllViews()
         breed.temperamentList.forEach { temperament ->
             val newChip = Chip(context).apply {

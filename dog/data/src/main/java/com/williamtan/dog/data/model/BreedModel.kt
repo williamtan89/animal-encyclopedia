@@ -9,7 +9,7 @@ data class BreedModel(
     val name: String,
     val image: BreedImageModel?,
     @Json(name = "reference_image_id") val referenceImageId: String?,
-    val temperament: String,
+    val temperament: String?,
     @Json(name = "wikipedia_url") val wikipediaUrl: String?,
     @Json(name = "energy_level") val energyLevel: Int?,
     val description: String?
