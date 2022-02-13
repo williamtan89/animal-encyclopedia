@@ -63,7 +63,7 @@ class BreedDetailFragment : Fragment() {
                             binding.layoutErrorState.isVisible = false
 
                             with(it.breed) {
-                                binding.tvBreedName.text = name
+                                binding.tvBreedName.text = this.toString()
                             }
                         }
                     }
