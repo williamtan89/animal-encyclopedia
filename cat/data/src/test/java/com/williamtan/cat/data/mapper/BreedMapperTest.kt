@@ -106,6 +106,28 @@ class BreedMapperTest {
     }
 
     @Test
+    fun `Given breed model with null values, Should return object with default value`() {
+        val model = BreedModel(
+            id = "breed id",
+            name = "breed name",
+            image = null,
+            referenceImageId = null,
+            temperament = null,
+            wikipediaUrl = null,
+            energyLevel = null,
+            description = null
+        )
+
+        val result = mapper.mapTo(model)
+
+        assertNull(result.imageUrl)
+        assertTrue(result.temperamentList.isEmpty())
+        assertNull(result.wikipediaUrl)
+        assertTrue(result.energyLevel == 0)
+        assertTrue(result.description.isBlank())
+    }
+
+    @Test
     fun `Given list of model, mapTo should return list of correctly mapped BreedEntity object`() {
         val expectedId = "breed id"
         val expectedName = "breed name"
