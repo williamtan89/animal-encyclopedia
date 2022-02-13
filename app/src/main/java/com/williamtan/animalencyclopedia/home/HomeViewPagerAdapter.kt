@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.williamtan.animalencyclopedia.promoted.PromotedFragment
 
-class HomeAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class HomeViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 2
 

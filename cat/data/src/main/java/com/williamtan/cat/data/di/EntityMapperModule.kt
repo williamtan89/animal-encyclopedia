@@ -2,6 +2,7 @@ package com.williamtan.cat.data.di
 
 import com.williamtan.cat.data.mapper.BreedMapper
 import com.williamtan.cat.data.mapper.BreedMapperImpl
+import com.williamtan.common.enumtype.AnimalType
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +14,5 @@ import javax.inject.Singleton
 object EntityMapperModule {
     @Provides
     @Singleton
-    fun provideBreedMapper(): BreedMapper = BreedMapperImpl()
+    fun provideBreedMapper(): BreedMapper = BreedMapperImpl(AnimalType.Cat)
 }

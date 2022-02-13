@@ -15,7 +15,7 @@ typealias PromotedBreedsListAdapter = ListAdapter<PromotedBreedsEntity, Promoted
 
 class PromotedBreedsAdapter(
     private val onAnimalTypeClick: (AnimalType) -> Unit,
-    private val onPromotedBreedClick: (String) -> Unit
+    private val onPromotedBreedClick: (AnimalType, String) -> Unit
 ) : PromotedBreedsListAdapter(HomeItemDiff) {
     private val viewPool = RecyclerView.RecycledViewPool()
 
@@ -46,7 +46,7 @@ class PromotedBreedsViewHolder(private val binding: ListItemPromotedBreedsBindin
     fun bind(
         item: PromotedBreedsEntity,
         onAnimalTypeClick: (AnimalType) -> Unit,
-        onPromotedBreedClick: (String) -> Unit,
+        onPromotedBreedClick: (AnimalType, String) -> Unit,
         viewPool: RecyclerView.RecycledViewPool
     ) {
         binding.tvAnimalType.text = item.animalType.name
@@ -54,7 +54,7 @@ class PromotedBreedsViewHolder(private val binding: ListItemPromotedBreedsBindin
 
         binding.rvRecentBreeds.apply {
             if (adapter == null) {
-                adapter = BreedAdapter()
+                adapter = BreedAdapter(onPromotedBreedClick)
 
                 addItemDecoration(SimpleItemDecoration(context, DividerItemDecoration.HORIZONTAL))
                 setRecycledViewPool(viewPool)

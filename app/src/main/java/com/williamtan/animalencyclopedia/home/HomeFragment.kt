@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var viewPagerAdapter: HomeAdapter
+    private lateinit var viewPagerAdapter: HomeViewPagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewPagerAdapter = HomeAdapter(this)
+        viewPagerAdapter = HomeViewPagerAdapter(this)
 
         binding.vpHome.apply {
             adapter = viewPagerAdapter

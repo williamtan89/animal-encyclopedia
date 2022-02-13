@@ -8,15 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.williamtan.animalencyclopedia.databinding.ListItemBreedBinding
 import com.williamtan.common.entity.BreedEntity
+import com.williamtan.common.enumtype.AnimalType
 
-class BreedAdapter : ListAdapter<BreedEntity, BreedViewHolder>(BreedItemDiff) {
+class BreedAdapter(
+    private val onBreedClick: (AnimalType, String) -> Unit
+) : ListAdapter<BreedEntity, BreedViewHolder>(BreedItemDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BreedViewHolder(
         ListItemBreedBinding.inflate(LayoutInflater.from(parent.context))
     )
 
     override fun onBindViewHolder(holder: BreedViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), onBreedClick)
     }
 
     object BreedItemDiff : DiffUtil.ItemCallback<BreedEntity>() {
@@ -28,13 +31,18 @@ class BreedAdapter : ListAdapter<BreedEntity, BreedViewHolder>(BreedItemDiff) {
     }
 }
 
-class BreedViewHolder(private val binding: ListItemBreedBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: BreedEntity) {
+class BreedViewHolder(
+    private val binding: ListItemBreedBinding
+) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(item: BreedEntity, onBreedClick: (AnimalType, String) -> Unit) {
         binding.tvBreedName.text = item.name
 
         Glide.with(binding.root)
             .load(item.imageUrl)
             .into(binding.ivBreed)
+
+        binding.cvRoot.setOnClickListener {
+            onBreedClick(item.animalType, item.id)
+        }
     }
 }

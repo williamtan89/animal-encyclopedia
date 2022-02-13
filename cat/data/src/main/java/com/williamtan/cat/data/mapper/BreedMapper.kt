@@ -2,13 +2,16 @@ package com.williamtan.cat.data.mapper
 
 import com.williamtan.cat.data.model.BreedModel
 import com.williamtan.common.entity.BreedEntity
+import com.williamtan.common.enumtype.AnimalType
 
 interface BreedMapper {
     fun mapTo(model: BreedModel): BreedEntity
     fun mapTo(modelList: List<BreedModel>): List<BreedEntity>
 }
 
-internal class BreedMapperImpl : BreedMapper {
+internal class BreedMapperImpl(
+    private val animalType: AnimalType
+) : BreedMapper {
     override fun mapTo(model: BreedModel): BreedEntity {
         val imageUrl = model.image?.url ?: if (!model.referenceImageId.isNullOrBlank()) {
             "https://cdn2.thecatapi.com/images/${model.referenceImageId}.jpg"
@@ -17,7 +20,8 @@ internal class BreedMapperImpl : BreedMapper {
         return BreedEntity(
             id = model.id,
             name = model.name,
-            imageUrl = imageUrl
+            imageUrl = imageUrl,
+            animalType = animalType
         )
     }
 

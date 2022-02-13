@@ -11,6 +11,9 @@
         <action
             android:id="@+id/homeToBreedAction"
             app:destination="@id/breedFragment" />
+        <action
+            android:id="@+id/homeToBreedDetailAction"
+            app:destination="@id/breedDetailFragment" />
     </fragment>
 
     <fragment

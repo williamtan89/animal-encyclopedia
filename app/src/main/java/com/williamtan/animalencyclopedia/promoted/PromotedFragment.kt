@@ -76,8 +76,9 @@ class PromotedFragment : Fragment() {
         }
     }
 
-    private val onPromotedBreedClick: (String) -> Unit = { breedId ->
-
+    private val onPromotedBreedClick: (AnimalType, String) -> Unit = { animalType, breedId ->
+        val action = HomeFragmentDirections.homeToBreedDetailAction(animalType, breedId)
+        view?.findNavController()?.navigate(action)
     }
 
     private val onAnimalTypeClick: (AnimalType) -> Unit = { animalType ->

@@ -19,6 +19,7 @@ import com.williamtan.animalencyclopedia.adapter.BreedAdapter
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedBinding
 import com.williamtan.animalencyclopedia.util.ConvertUtil
 import com.williamtan.animalencyclopedia.view.GridItemDecoration
+import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
@@ -31,7 +32,7 @@ import kotlinx.coroutines.launch
 class BreedFragment : Fragment() {
     private val viewModel: BreedViewModel by viewModels()
     private val args: BreedFragmentArgs by navArgs()
-    
+
     private lateinit var binding: FragmentBreedBinding
     private lateinit var adapter: BreedAdapter
 
@@ -48,6 +49,7 @@ class BreedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // setup toolbar navigation
         binding.tbBreed.apply {
             setNavigationIcon(R.drawable.ic_back_24)
             setNavigationOnClickListener {
@@ -55,7 +57,8 @@ class BreedFragment : Fragment() {
             }
         }
 
-        adapter = BreedAdapter()
+        // setup breed list
+        adapter = BreedAdapter(onBreedClick)
 
         binding.rvBreed.apply {
             adapter = this@BreedFragment.adapter
@@ -79,6 +82,7 @@ class BreedFragment : Fragment() {
             })
         }
 
+        // setup searchview
         binding.svBreed.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 lifecycleScope.launch {
@@ -97,6 +101,7 @@ class BreedFragment : Fragment() {
             }
         })
 
+        // start collecting uistate flow
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
@@ -120,6 +125,7 @@ class BreedFragment : Fragment() {
             }
         }
 
+        // start collecting breed list data fow
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.breedEntityData.collect {
@@ -128,6 +134,7 @@ class BreedFragment : Fragment() {
             }
         }
 
+        // start search query hotflow with debounce
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.searchQuery.onEach {
@@ -135,5 +142,14 @@ class BreedFragment : Fragment() {
                 }.debounce(250).shareIn(this, SharingStarted.Eagerly)
             }
         }
+    }
+
+    private val onBreedClick: (AnimalType, String) -> Unit = { animalType, breedId ->
+        val action = BreedFragmentDirections.breedToBreedDetailAction(
+            animalType = animalType,
+            breedId = breedId
+        )
+
+        view?.findNavController()?.navigate(action)
     }
 }

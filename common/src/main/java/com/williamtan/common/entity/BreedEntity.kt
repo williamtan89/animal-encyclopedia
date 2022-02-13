@@ -5,5 +5,6 @@ import com.williamtan.common.enumtype.AnimalType
 data class BreedEntity(
     val id: String,
     val name: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    val animalType: AnimalType,
 )
