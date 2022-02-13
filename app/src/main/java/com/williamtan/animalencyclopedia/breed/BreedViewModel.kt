@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType
-import com.williamtan.domain.usecase.GetBreeds
-import com.williamtan.domain.usecase.SearchBreedsByName
+import com.williamtan.domain.usecase.breed.GetBreeds
+import com.williamtan.domain.usecase.breed.SearchBreedsByName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

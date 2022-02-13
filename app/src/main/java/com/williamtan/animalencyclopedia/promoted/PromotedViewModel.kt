@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.williamtan.common.entity.PromotedBreedsEntity
 import com.williamtan.common.enumtype.AnimalType
-import com.williamtan.domain.usecase.GetAnimalTypeList
-import com.williamtan.domain.usecase.GetAnimalTypeWithPromotedBreeds
+import com.williamtan.domain.usecase.animaltype.GetAnimalTypeList
+import com.williamtan.domain.usecase.animaltype.GetAnimalTypeWithPromotedBreeds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch

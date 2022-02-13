@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType
-import com.williamtan.domain.usecase.GetBreedById
+import com.williamtan.domain.usecase.breed.GetBreedById
 import com.williamtan.domain.usecase.favorite.AddBreedToFavorite
 import com.williamtan.domain.usecase.favorite.RemoveBreedFromFavorite
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -2,11 +2,11 @@ package com.williamtan.domain.di
 
 import com.williamtan.domain.repository.CatRepository
 import com.williamtan.domain.repository.FavoriteRepository
-import com.williamtan.domain.usecase.GetAnimalTypeList
-import com.williamtan.domain.usecase.GetAnimalTypeWithPromotedBreeds
-import com.williamtan.domain.usecase.GetBreedById
-import com.williamtan.domain.usecase.GetBreeds
-import com.williamtan.domain.usecase.SearchBreedsByName
+import com.williamtan.domain.usecase.animaltype.GetAnimalTypeList
+import com.williamtan.domain.usecase.animaltype.GetAnimalTypeWithPromotedBreeds
+import com.williamtan.domain.usecase.breed.GetBreedById
+import com.williamtan.domain.usecase.breed.GetBreeds
+import com.williamtan.domain.usecase.breed.SearchBreedsByName
 import com.williamtan.domain.usecase.favorite.AddBreedToFavorite
 import com.williamtan.domain.usecase.favorite.GetFavoriteList
 import com.williamtan.domain.usecase.favorite.RemoveBreedFromFavorite

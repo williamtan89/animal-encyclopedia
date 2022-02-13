@@ -1,4 +1,4 @@
-package com.williamtan.domain.usecase
+package com.williamtan.domain.usecase.animaltype
 
 import com.williamtan.common.enumtype.AnimalType
 import kotlinx.coroutines.flow.Flow

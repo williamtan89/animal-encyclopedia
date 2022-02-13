@@ -1,4 +1,4 @@
-package com.williamtan.domain.usecase
+package com.williamtan.domain.usecase.breed
 
 import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType

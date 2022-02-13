@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
-class FavoriteRepositoryImpl : FavoriteRepository {
+internal class FavoriteRepositoryImpl : FavoriteRepository {
     // in-memory datasource
     private val favoriteList = MutableStateFlow<List<BreedEntity>>(emptyList())
 
