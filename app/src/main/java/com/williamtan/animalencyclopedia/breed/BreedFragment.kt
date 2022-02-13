@@ -17,14 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.adapter.BreedAdapter
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedBinding
-import com.williamtan.animalencyclopedia.util.ConvertUtil
 import com.williamtan.animalencyclopedia.view.GridItemDecoration
 import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 
 
@@ -62,7 +58,11 @@ class BreedFragment : Fragment() {
 
         binding.rvBreed.apply {
             adapter = this@BreedFragment.adapter
-            context?.let { addItemDecoration(GridItemDecoration(ConvertUtil.dpToPx(it, 8))) }
+
+            context?.let {
+                val spacing = context.resources.getDimensionPixelSize(R.dimen.list_item_spacing_8dp)
+                addItemDecoration(GridItemDecoration(spacing))
+            }
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -72,10 +72,9 @@ class BreedFragment : Fragment() {
                         !recyclerView.canScrollVertically(1) &&
                         newState == RecyclerView.SCROLL_STATE_IDLE
                     ) {
-                        if (viewModel.searchQuery.value.isNullOrBlank()) {
-                            lifecycleScope.launch {
-                                viewModel.loadBreeds(args.animalType)
-                            }
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            println("TEST: scroll state changed! loading")
+                            viewModel.loadBreeds(args.animalType)
                         }
                     }
                 }
@@ -85,16 +84,13 @@ class BreedFragment : Fragment() {
         // setup searchview
         binding.svBreed.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                lifecycleScope.launch {
-                    viewModel.updateSearchQuery(query)
-                }
-
+                // don't have to do anything since onQueryTextChange will updates in the end
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                lifecycleScope.launch {
-                    viewModel.updateSearchQuery(newText)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.searchQuery.emit(newText)
                 }
 
                 return true
@@ -102,7 +98,7 @@ class BreedFragment : Fragment() {
         })
 
         // start collecting uistate flow
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
@@ -126,7 +122,7 @@ class BreedFragment : Fragment() {
         }
 
         // start collecting breed list data fow
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.breedEntityData.collect {
                     adapter.submitList(it)
@@ -134,12 +130,14 @@ class BreedFragment : Fragment() {
             }
         }
 
-        // start search query hotflow with debounce
-        lifecycleScope.launch {
+        // start collecting search query with debounce
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchQuery.onEach {
-                    viewModel.loadBreeds(args.animalType)
-                }.debounce(250).shareIn(this, SharingStarted.Eagerly)
+                viewModel.searchQuery.debounce(250).collect { q ->
+                    q?.let {
+                        viewModel.searchBreedByName(args.animalType, q)
+                    }
+                }
             }
         }
     }

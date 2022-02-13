@@ -1,6 +1,7 @@
 package com.williamtan.animalencyclopedia.promoted
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.williamtan.common.entity.PromotedBreedsEntity
 import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.usecase.GetAnimalTypeList
@@ -8,6 +9,7 @@ import com.williamtan.domain.usecase.GetAnimalTypeWithPromotedBreeds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +19,12 @@ class PromotedViewModel @Inject constructor(
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
     val dataMap = MutableStateFlow<Map<AnimalType, PromotedBreedsEntity>>(emptyMap())
+
+    init {
+        viewModelScope.launch {
+            loadAnimalType()
+        }
+    }
 
     suspend fun loadAnimalType() = getAnimalTypeList()
         .catch {

@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class SimpleItemDecoration(
     context: Context,
-    orientation: Int
+    private val spacing: Int,
+    private val orientation: Int
 ) : DividerItemDecoration(context, orientation) {
     override fun getItemOffsets(
         outRect: Rect,
@@ -20,15 +21,33 @@ class SimpleItemDecoration(
     ) {
         val position = parent.getChildAdapterPosition(view)
         val itemCount = parent.adapter?.itemCount ?: 0
+        val isFirst = position == 0
+        val isLast = position == itemCount - 1
+        val isHorizontal = orientation == HORIZONTAL
+        val isVertical = orientation == VERTICAL
 
-        val newRect = when (position) {
-            // first
-            0 -> Rect(20, 0, 10, 0)
+        val newRect = when {
+            isHorizontal && isFirst -> {
+                Rect(spacing, 0, spacing / 2, 0)
+            }
+            isHorizontal && isLast -> {
+                Rect(spacing / 2, 0, spacing, 0)
+            }
+            isHorizontal -> {
+                Rect(spacing / 2, 0, spacing / 2, 0)
+            }
 
-            // last
-            itemCount - 1 -> Rect(10, 0, 20, 0)
-            
-            else -> Rect(10, 0, 10, 0)
+            isVertical && isFirst -> {
+                Rect(0, spacing, 0, spacing / 2)
+            }
+            isVertical && isLast -> {
+                Rect(0, spacing / 2, 0, spacing)
+            }
+            isVertical -> {
+                Rect(0, spacing / 2, 0, spacing / 2)
+            }
+
+            else -> throw Exception("Unsupported orientation")
         }
 
         outRect.set(newRect)

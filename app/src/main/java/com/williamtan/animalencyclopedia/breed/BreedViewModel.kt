@@ -1,55 +1,67 @@
 package com.williamtan.animalencyclopedia.breed
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.usecase.GetBreeds
 import com.williamtan.domain.usecase.SearchBreedsByName
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BreedViewModel @Inject constructor(
     private val getBreeds: GetBreeds,
-    private val searchBreedsByName: SearchBreedsByName
+    private val searchBreedsByName: SearchBreedsByName,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
     val breedEntityData = MutableStateFlow<List<BreedEntity>>(emptyList())
-    val searchQuery = MutableStateFlow<String?>(null)
+    val searchQuery = MutableSharedFlow<String?>()
 
     private var currentPage = 0
 
-    suspend fun updateSearchQuery(query: String?) {
-        searchQuery.emit(query?.trim())
-        breedEntityData.emit(emptyList())
+    init {
+        viewModelScope.launch {
+            (savedStateHandle.get("animalType") as? AnimalType)?.let {
+                loadBreeds(it)
+            }
+        }
+    }
+
+    suspend fun searchBreedByName(animalType: AnimalType, query: String) {
         currentPage = 0
+
+        searchBreedsByName(animalType, query)
+            .catch {
+                it.printStackTrace()
+                uiState.emit(ScreenState.Error("Try again later"))
+            }.collect { breeds ->
+                if (breedEntityData.value.isEmpty() && breeds.isEmpty()) {
+                    uiState.emit(ScreenState.Empty)
+                } else {
+                    uiState.emit(ScreenState.Success)
+                    breedEntityData.emit(breeds)
+                }
+            }
     }
 
     suspend fun loadBreeds(animalType: AnimalType) {
-        val query = searchQuery.value
-
-        if (!query.isNullOrBlank()) {
-            searchBreedsByName(animalType, query)
-        } else {
-            getBreeds(animalType, currentPage)
-        }.catch {
+        getBreeds(animalType, currentPage).catch {
             it.printStackTrace()
             uiState.emit(ScreenState.Error("Try again later"))
         }.collect { breeds ->
             if (breedEntityData.value.isEmpty() && breeds.isEmpty()) {
                 uiState.emit(ScreenState.Empty)
             } else {
-                val newEntityData = if (!query.isNullOrBlank()) {
-                    breeds
-                } else {
-                    currentPage++
-                    breedEntityData.value + breeds
-                }
-
                 uiState.emit(ScreenState.Success)
-                breedEntityData.emit(newEntityData)
+                breedEntityData.emit(breedEntityData.value + breeds)
+                currentPage++
             }
         }
     }

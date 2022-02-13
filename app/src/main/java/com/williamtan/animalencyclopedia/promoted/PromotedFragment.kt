@@ -40,7 +40,7 @@ class PromotedFragment : Fragment() {
         adapter = PromotedBreedsAdapter(onAnimalTypeClick, onPromotedBreedClick)
         binding.rvPromoted.adapter = adapter
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
@@ -63,16 +63,12 @@ class PromotedFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.dataMap.collect {
                     adapter.submitList(it.values.toList())
                 }
             }
-        }
-
-        lifecycleScope.launch {
-            viewModel.loadAnimalType()
         }
     }
 

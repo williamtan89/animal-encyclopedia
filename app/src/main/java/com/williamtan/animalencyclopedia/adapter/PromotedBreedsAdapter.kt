@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.databinding.ListItemPromotedBreedsBinding
 import com.williamtan.animalencyclopedia.view.SimpleItemDecoration
 import com.williamtan.common.entity.PromotedBreedsEntity
@@ -56,7 +57,8 @@ class PromotedBreedsViewHolder(private val binding: ListItemPromotedBreedsBindin
             if (adapter == null) {
                 adapter = BreedAdapter(onPromotedBreedClick)
 
-                addItemDecoration(SimpleItemDecoration(context, DividerItemDecoration.HORIZONTAL))
+                val spacing = context.resources.getDimensionPixelSize(R.dimen.list_item_spacing_16dp)
+                addItemDecoration(SimpleItemDecoration(context, spacing, DividerItemDecoration.HORIZONTAL))
                 setRecycledViewPool(viewPool)
             }
 
