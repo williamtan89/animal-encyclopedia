@@ -40,7 +40,7 @@ class BreedViewModel @Inject constructor(
         searchBreedsByName(animalType, query)
             .catch {
                 it.printStackTrace()
-                uiState.emit(ScreenState.Error("Try again later"))
+                uiState.emit(ScreenState.Error(it.stackTraceToString()))
             }.collect { breeds ->
                 if (breedEntityData.value.isEmpty() && breeds.isEmpty()) {
                     uiState.emit(ScreenState.Empty)
@@ -54,7 +54,7 @@ class BreedViewModel @Inject constructor(
     suspend fun loadBreeds(animalType: AnimalType) {
         getBreeds(animalType, currentPage).catch {
             it.printStackTrace()
-            uiState.emit(ScreenState.Error("Try again later"))
+            uiState.emit(ScreenState.Error(it.stackTraceToString()))
         }.collect { breeds ->
             if (breedEntityData.value.isEmpty() && breeds.isEmpty()) {
                 uiState.emit(ScreenState.Empty)

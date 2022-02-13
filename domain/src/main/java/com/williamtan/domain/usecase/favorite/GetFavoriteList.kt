@@ -4,14 +4,8 @@ import com.williamtan.common.entity.BreedEntity
 import com.williamtan.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 
-interface GetFavoriteList {
-    suspend operator fun invoke(): Flow<List<BreedEntity>>
-}
-
-internal class GetFavoriteListImpl(
+class GetFavoriteList(
     private val favoriteRepository: FavoriteRepository
-) : GetFavoriteList {
-    override suspend fun invoke(): Flow<List<BreedEntity>> {
-        return favoriteRepository.favoriteList()
-    }
+) {
+    suspend operator fun invoke(): Flow<List<BreedEntity>> = favoriteRepository.favoriteList()
 }

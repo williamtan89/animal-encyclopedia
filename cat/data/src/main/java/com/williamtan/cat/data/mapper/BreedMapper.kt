@@ -22,7 +22,7 @@ internal class BreedMapperImpl(
             name = model.name,
             imageUrl = imageUrl,
             animalType = animalType,
-            temperament = model.temperament.split(",").map { it.trim() },
+            temperamentList = model.temperament.split(",").map { it.trim() },
             wikipediaUrl = model.wikipediaUrl,
             energyLevel = model.energyLevel,
             description = model.description

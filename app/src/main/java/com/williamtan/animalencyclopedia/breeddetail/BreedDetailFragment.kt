@@ -84,9 +84,9 @@ class BreedDetailFragment : Fragment() {
 
         // clear existing chips, if any
         binding.cgTemperament.removeAllViews()
-        breed.temperament.forEach { t ->
+        breed.temperamentList.forEach { temperament ->
             val newChip = Chip(context).apply {
-                text = t
+                text = temperament
                 setEnsureMinTouchTargetSize(false)
                 isClickable = false
             }
@@ -105,9 +105,9 @@ class BreedDetailFragment : Fragment() {
             .into(binding.ivToolbar)
 
         if (!breed.isFavorite) {
-            binding.btnFavorite.text = "ADD TO FAVORITE"
+            binding.btnFavorite.text = resources.getString(R.string.add_to_favorite)
         } else {
-            binding.btnFavorite.text = "REMOVE FROM FAVORITE"
+            binding.btnFavorite.text = resources.getString(R.string.remove_from_favorite)
         }
 
         binding.btnFavorite.setOnClickListener {

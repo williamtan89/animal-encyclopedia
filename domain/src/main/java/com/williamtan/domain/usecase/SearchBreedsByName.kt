@@ -5,18 +5,15 @@ import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.repository.CatRepository
 import kotlinx.coroutines.flow.Flow
 
-interface SearchBreedsByName {
-    suspend operator fun invoke(animalType: AnimalType, name: String): Flow<List<BreedEntity>>
-}
-
-internal class SearchBreedsByNameImpl(
+class SearchBreedsByName(
     private val catRepository: CatRepository
-) : SearchBreedsByName {
-    override suspend operator fun invoke(
+) {
+    suspend operator fun invoke(
         animalType: AnimalType,
         name: String
     ): Flow<List<BreedEntity>> = when (animalType) {
         AnimalType.Cat -> catRepository.searchByName(name)
+        
         else -> throw Exception("AnimalType $animalType not supported")
     }
 }

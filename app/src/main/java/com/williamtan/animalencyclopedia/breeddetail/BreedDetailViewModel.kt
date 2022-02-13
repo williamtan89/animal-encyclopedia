@@ -46,7 +46,7 @@ class BreedDetailViewModel @Inject constructor(
         getBreedById(animalType, breedId)
             .catch {
                 it.printStackTrace()
-                uiState.emit(ScreenState.Error("Try again later"))
+                uiState.emit(ScreenState.Error(it.stackTraceToString()))
             }.collect { breed ->
                 if (breed == null) {
                     uiState.emit(ScreenState.Empty)

@@ -26,7 +26,7 @@ class FavoriteViewModel @Inject constructor(
         getFavoriteList()
             .catch {
                 it.printStackTrace()
-                uiState.emit(ScreenState.Error("Try again later"))
+                uiState.emit(ScreenState.Error(it.stackTraceToString()))
             }.collect { favoriteList ->
                 if (favoriteList.isEmpty()) {
                     uiState.emit(ScreenState.Empty)

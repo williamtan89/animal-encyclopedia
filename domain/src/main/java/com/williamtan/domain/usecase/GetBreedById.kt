@@ -7,15 +7,11 @@ import com.williamtan.domain.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
-interface GetBreedById {
-    suspend operator fun invoke(animalType: AnimalType, breedId: String): Flow<BreedEntity?>
-}
-
-class GetBreedByIdImpl(
+class GetBreedById(
     private val catRepository: CatRepository,
     private val favoriteRepository: FavoriteRepository
-) : GetBreedById {
-    override suspend fun invoke(
+) {
+    suspend operator fun invoke(
         animalType: AnimalType,
         breedId: String
     ): Flow<BreedEntity?> = when (animalType) {
@@ -27,6 +23,7 @@ class GetBreedByIdImpl(
                     )
                 }
         }
+
         else -> throw Exception("AnimalType $animalType not supported")
     }
 }

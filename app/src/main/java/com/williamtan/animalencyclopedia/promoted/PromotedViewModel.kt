@@ -26,9 +26,10 @@ class PromotedViewModel @Inject constructor(
         }
     }
 
-    suspend fun loadAnimalType() = getAnimalTypeList()
+    private suspend fun loadAnimalType() = getAnimalTypeList()
         .catch {
-            uiState.emit(ScreenState.Error("Try again later"))
+            it.printStackTrace()
+            uiState.emit(ScreenState.Error(it.stackTraceToString()))
         }
         .collect { animalTypeList ->
             if (animalTypeList.isEmpty()) {

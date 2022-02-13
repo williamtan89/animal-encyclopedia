@@ -2,4 +2,10 @@
     <string name="app_name">AnimalEncyclopedia</string>
     <string name="breed_detail_id">No. %s</string>
     <string name="breed_detail_energy_level">Level %d</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_favorite">Favorite</string>
+
+    <string name="add_to_favorite">Add to favorite</string>
+    <string name="remove_from_favorite">Remove from favorite</string>
 </resources>

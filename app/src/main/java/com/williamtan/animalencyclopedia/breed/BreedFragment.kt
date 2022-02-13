@@ -73,7 +73,6 @@ class BreedFragment : Fragment() {
                         newState == RecyclerView.SCROLL_STATE_IDLE
                     ) {
                         viewLifecycleOwner.lifecycleScope.launch {
-                            println("TEST: scroll state changed! loading")
                             viewModel.loadBreeds(args.animalType)
                         }
                     }
@@ -133,7 +132,7 @@ class BreedFragment : Fragment() {
         // start collecting search query with debounce
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchQuery.debounce(250).collect { q ->
+                viewModel.searchQuery.debounce(500).collect { q ->
                     q?.let {
                         viewModel.searchBreedByName(args.animalType, q)
                     }

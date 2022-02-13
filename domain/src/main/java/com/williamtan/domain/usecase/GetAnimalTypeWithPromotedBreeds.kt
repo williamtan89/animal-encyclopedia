@@ -5,19 +5,12 @@ import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.repository.CatRepository
 import kotlinx.coroutines.flow.Flow
 
-interface GetAnimalTypeWithPromotedBreeds {
+class GetAnimalTypeWithPromotedBreeds(
+    private val catRepository: CatRepository
+) {
     suspend operator fun invoke(
         animalType: AnimalType,
         breedIdList: List<String>? = null
-    ): Flow<List<BreedEntity>>
-}
-
-internal class GetAnimalTypeWithPromotedBreedsImpl(
-    private val catRepository: CatRepository
-) : GetAnimalTypeWithPromotedBreeds {
-    override suspend operator fun invoke(
-        animalType: AnimalType,
-        breedIdList: List<String>?
     ): Flow<List<BreedEntity>> = when (animalType) {
         AnimalType.Cat -> catRepository.getCatBreedList(
             breedIdList,

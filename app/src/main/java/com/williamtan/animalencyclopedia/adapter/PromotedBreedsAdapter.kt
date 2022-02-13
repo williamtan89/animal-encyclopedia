@@ -52,13 +52,20 @@ class PromotedBreedsViewHolder(private val binding: ListItemPromotedBreedsBindin
     ) {
         binding.tvAnimalType.text = item.animalType.name
         binding.tvAnimalType.setOnClickListener { onAnimalTypeClick(item.animalType) }
-
+        
         binding.rvRecentBreeds.apply {
             if (adapter == null) {
                 adapter = BreedAdapter(onPromotedBreedClick)
 
-                val spacing = context.resources.getDimensionPixelSize(R.dimen.list_item_spacing_16dp)
-                addItemDecoration(SimpleItemDecoration(context, spacing, DividerItemDecoration.HORIZONTAL))
+                val spacing =
+                    context.resources.getDimensionPixelSize(R.dimen.list_item_spacing_16dp)
+                addItemDecoration(
+                    SimpleItemDecoration(
+                        context,
+                        spacing,
+                        DividerItemDecoration.HORIZONTAL
+                    )
+                )
                 setRecycledViewPool(viewPool)
             }
 
