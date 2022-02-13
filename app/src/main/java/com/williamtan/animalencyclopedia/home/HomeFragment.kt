@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewPagerAdapter = HomeAdapter(this)
-        
+
         binding.vpHome.apply {
             adapter = viewPagerAdapter
             isUserInputEnabled = false

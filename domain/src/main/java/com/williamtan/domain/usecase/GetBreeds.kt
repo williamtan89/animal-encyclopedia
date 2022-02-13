@@ -5,25 +5,23 @@ import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.repository.CatRepository
 import kotlinx.coroutines.flow.Flow
 
-interface GetAnimalTypeWithRecentBreeds {
-    suspend operator fun invoke(
-        animalType: AnimalType,
-        breedIdList: List<String>? = null
-    ): Flow<List<BreedEntity>>
+interface GetBreeds {
+    suspend operator fun invoke(animalType: AnimalType, page: Int): Flow<List<BreedEntity>>
 }
 
-internal class GetAnimalTypeWithRecentBreedsImpl(
+class GetBreedsImpl(
     private val catRepository: CatRepository
-) : GetAnimalTypeWithRecentBreeds {
-    override suspend operator fun invoke(
+) : GetBreeds {
+    override suspend fun invoke(
         animalType: AnimalType,
-        breedIdList: List<String>?
+        page: Int
     ): Flow<List<BreedEntity>> = when (animalType) {
         AnimalType.Cat -> catRepository.getCatBreedList(
-            breedIdList,
+            null,
             10,
-            0
+            page
         )
         else -> throw Exception("AnimalType $animalType not supported")
     }
+
 }

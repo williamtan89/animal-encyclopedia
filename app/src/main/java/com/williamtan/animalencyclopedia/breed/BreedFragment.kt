@@ -1,4 +1,4 @@
-package com.williamtan.animalencyclopedia.promoted
+package com.williamtan.animalencyclopedia.breed
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,25 +11,28 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
-import com.williamtan.animalencyclopedia.adapter.PromotedBreedsAdapter
-import com.williamtan.animalencyclopedia.databinding.FragmentPromotedBinding
-import com.williamtan.animalencyclopedia.home.HomeFragmentDirections
-import com.williamtan.common.enumtype.AnimalType
+import androidx.navigation.fragment.navArgs
+import com.williamtan.animalencyclopedia.R
+import com.williamtan.animalencyclopedia.adapter.BreedAdapter
+import com.williamtan.animalencyclopedia.databinding.FragmentBreedBinding
+import com.williamtan.animalencyclopedia.view.GridItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PromotedFragment : Fragment() {
-    private val viewModel: PromotedViewModel by viewModels()
-    private lateinit var binding: FragmentPromotedBinding
-    private lateinit var adapter: PromotedBreedsAdapter
+class BreedFragment : Fragment() {
+    private val viewModel: BreedViewModel by viewModels()
+    private lateinit var binding: FragmentBreedBinding
+    private lateinit var adapter: BreedAdapter
+
+    val args: BreedFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPromotedBinding.inflate(layoutInflater)
+        binding = FragmentBreedBinding.inflate(inflater)
 
         return binding.root
     }
@@ -37,24 +40,30 @@ class PromotedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PromotedBreedsAdapter(onAnimalTypeClick, onPromotedBreedClick)
-        binding.rvPromoted.adapter = adapter
+        binding.tbBreed.setNavigationIcon(R.drawable.ic_back_24)
+        binding.tbBreed.setNavigationOnClickListener {
+            view.findNavController().popBackStack()
+        }
+
+        adapter = BreedAdapter()
+        binding.rvBreed.adapter = adapter
+        binding.rvBreed.addItemDecoration(GridItemDecoration(16, 2))
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
-                        is PromotedViewModel.ScreenState.Empty -> {
+                        is BreedViewModel.ScreenState.Empty -> {
                             binding.layoutEmptyState.isVisible = true
                             binding.layoutErrorState.isVisible = false
                         }
 
-                        is PromotedViewModel.ScreenState.Error -> {
+                        is BreedViewModel.ScreenState.Error -> {
                             binding.layoutEmptyState.isVisible = false
                             binding.layoutErrorState.isVisible = true
                         }
 
-                        is PromotedViewModel.ScreenState.Success -> {
+                        is BreedViewModel.ScreenState.Success -> {
                             binding.layoutEmptyState.isVisible = false
                             binding.layoutErrorState.isVisible = false
                         }
@@ -66,22 +75,13 @@ class PromotedFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.dataMap.collect {
-                    adapter.submitList(it.values.toList())
+                    adapter.submitList(it)
                 }
             }
         }
 
         lifecycleScope.launch {
-            viewModel.loadAnimalType()
+            viewModel.loadBreeds(args.animalType)
         }
-    }
-
-    private val onPromotedBreedClick: (String) -> Unit = { breedId ->
-
-    }
-
-    private val onAnimalTypeClick: (AnimalType) -> Unit = { animalType ->
-        val action = HomeFragmentDirections.homeToBreedAction(animalType)
-        view?.findNavController()?.navigate(action)
     }
 }

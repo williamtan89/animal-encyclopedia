@@ -1,7 +1,14 @@
 package com.williamtan.domain.di
 
 import com.williamtan.domain.repository.CatRepository
-import com.williamtan.domain.usecase.*
+import com.williamtan.domain.usecase.GetAnimalTypeList
+import com.williamtan.domain.usecase.GetAnimalTypeListImpl
+import com.williamtan.domain.usecase.GetAnimalTypeWithPromotedBreeds
+import com.williamtan.domain.usecase.GetAnimalTypeWithPromotedBreedsImpl
+import com.williamtan.domain.usecase.GetBreeds
+import com.williamtan.domain.usecase.GetBreedsImpl
+import com.williamtan.domain.usecase.SearchBreedsByName
+import com.williamtan.domain.usecase.SearchBreedsByNameImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,9 +20,9 @@ import javax.inject.Singleton
 object UseCaseModule {
     @Provides
     @Singleton
-    fun provideGetRecentBreeds(
+    fun provideGetAnimalTypeWithPromotedBreeds(
         catRepository: CatRepository
-    ): GetAnimalTypeWithRecentBreeds = GetAnimalTypeWithRecentBreedsImpl(catRepository)
+    ): GetAnimalTypeWithPromotedBreeds = GetAnimalTypeWithPromotedBreedsImpl(catRepository)
 
     @Provides
     @Singleton
@@ -26,4 +33,10 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideGetAnimalTypeList(): GetAnimalTypeList = GetAnimalTypeListImpl()
+
+    @Provides
+    @Singleton
+    fun provideGetBreeds(
+        catRepository: CatRepository
+    ): GetBreeds = GetBreedsImpl(catRepository)
 }

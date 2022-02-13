@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.williamtan.animalencyclopedia.databinding.ListItemPromotedBreedsBinding
 import com.williamtan.animalencyclopedia.view.SimpleItemDecoration
 import com.williamtan.common.entity.PromotedBreedsEntity
+import com.williamtan.common.enumtype.AnimalType
 
 typealias PromotedBreedsListAdapter = ListAdapter<PromotedBreedsEntity, PromotedBreedsViewHolder>
 
-class PromotedBreedsAdapter : PromotedBreedsListAdapter(HomeItemDiff) {
+class PromotedBreedsAdapter(
+    private val onAnimalTypeClick: (AnimalType) -> Unit,
+    private val onPromotedBreedClick: (String) -> Unit
+) : PromotedBreedsListAdapter(HomeItemDiff) {
     private val viewPool = RecyclerView.RecycledViewPool()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -21,7 +25,7 @@ class PromotedBreedsAdapter : PromotedBreedsListAdapter(HomeItemDiff) {
         )
 
     override fun onBindViewHolder(holder: PromotedBreedsViewHolder, position: Int) {
-        holder.bind(getItem(position), viewPool)
+        holder.bind(getItem(position), onAnimalTypeClick, onPromotedBreedClick, viewPool)
     }
 
     object HomeItemDiff : DiffUtil.ItemCallback<PromotedBreedsEntity>() {
@@ -39,8 +43,14 @@ class PromotedBreedsAdapter : PromotedBreedsListAdapter(HomeItemDiff) {
 
 class PromotedBreedsViewHolder(private val binding: ListItemPromotedBreedsBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: PromotedBreedsEntity, viewPool: RecyclerView.RecycledViewPool) {
+    fun bind(
+        item: PromotedBreedsEntity,
+        onAnimalTypeClick: (AnimalType) -> Unit,
+        onPromotedBreedClick: (String) -> Unit,
+        viewPool: RecyclerView.RecycledViewPool
+    ) {
         binding.tvAnimalType.text = item.animalType.name
+        binding.tvAnimalType.setOnClickListener { onAnimalTypeClick(item.animalType) }
 
         binding.rvRecentBreeds.apply {
             if (adapter == null) {
