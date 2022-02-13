@@ -4,23 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cv_root"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_breed"
             android:layout_width="0dp"
             android:layout_height="160dp"
             android:scaleType="centerCrop"
+            app:layout_constraintWidth_min="160dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/tv_breed_name"
