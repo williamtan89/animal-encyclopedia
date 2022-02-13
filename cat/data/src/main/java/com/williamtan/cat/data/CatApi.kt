@@ -2,6 +2,7 @@ package com.williamtan.cat.data
 
 import com.williamtan.cat.data.model.BreedModel
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CatApi {
@@ -16,4 +17,9 @@ interface CatApi {
     suspend fun searchByName(
         @Query("q") name: String
     ): List<BreedModel>
+
+    @GET("v1/breeds/{breed_id}")
+    suspend fun getBreedById(
+        @Path("breed_id") breedId: String
+    ): BreedModel?
 }

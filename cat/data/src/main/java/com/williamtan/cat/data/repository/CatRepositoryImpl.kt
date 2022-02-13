@@ -34,4 +34,14 @@ internal class CatRepositoryImpl(
             )
         }
     }
+
+    override suspend fun getCatBreedById(breedId: String): Flow<BreedEntity?> {
+        return flow {
+            emit(
+                catApi.getBreedById(breedId)?.let {
+                    breedMapper.mapTo(it)
+                }
+            )
+        }
+    }
 }

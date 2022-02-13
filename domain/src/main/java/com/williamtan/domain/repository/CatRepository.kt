@@ -11,4 +11,5 @@ interface CatRepository {
     ): Flow<List<BreedEntity>>
 
     suspend fun searchByName(name: String): Flow<List<BreedEntity>>
+    suspend fun getCatBreedById(breedId: String): Flow<BreedEntity?>
 }

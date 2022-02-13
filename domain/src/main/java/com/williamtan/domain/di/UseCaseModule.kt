@@ -5,6 +5,8 @@ import com.williamtan.domain.usecase.GetAnimalTypeList
 import com.williamtan.domain.usecase.GetAnimalTypeListImpl
 import com.williamtan.domain.usecase.GetAnimalTypeWithPromotedBreeds
 import com.williamtan.domain.usecase.GetAnimalTypeWithPromotedBreedsImpl
+import com.williamtan.domain.usecase.GetBreedById
+import com.williamtan.domain.usecase.GetBreedByIdImpl
 import com.williamtan.domain.usecase.GetBreeds
 import com.williamtan.domain.usecase.GetBreedsImpl
 import com.williamtan.domain.usecase.SearchBreedsByName
@@ -39,4 +41,10 @@ object UseCaseModule {
     fun provideGetBreeds(
         catRepository: CatRepository
     ): GetBreeds = GetBreedsImpl(catRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetBreedById(
+        catRepository: CatRepository
+    ): GetBreedById = GetBreedByIdImpl(catRepository)
 }
