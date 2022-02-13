@@ -20,5 +20,20 @@
         <argument
             android:name="animalType"
             app:argType="com.williamtan.common.enumtype.AnimalType" />
+        <action
+            android:id="@+id/breedToBreedDetailAction"
+            app:destination="@id/breedDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/breedDetailFragment"
+        android:name="com.williamtan.animalencyclopedia.breeddetail.BreedDetailFragment"
+        android:label="BreedDetail">
+        <argument
+            android:name="animalType"
+            app:argType="com.williamtan.common.enumtype.AnimalType" />
+        <argument
+            android:name="breedId"
+            app:argType="string" />
     </fragment>
 </navigation>
