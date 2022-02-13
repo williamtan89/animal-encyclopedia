@@ -1,5 +1,7 @@
 package com.williamtan.common.entity
 
+import com.williamtan.common.enumtype.AnimalType
+
 data class BreedEntity(
     val id: String,
     val name: String,

@@ -1,7 +1,7 @@
 package com.williamtan.domain.usecase
 
-import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.common.entity.BreedEntity
+import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.repository.CatRepository
 import kotlinx.coroutines.flow.Flow
 

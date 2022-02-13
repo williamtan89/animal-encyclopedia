@@ -9,11 +9,18 @@ interface BreedMapper {
 }
 
 internal class BreedMapperImpl : BreedMapper {
-    override fun mapTo(model: BreedModel): BreedEntity = BreedEntity(
-        id = model.id,
-        name = model.name,
-        imageUrl = model.image?.url
-    )
+    override fun mapTo(model: BreedModel): BreedEntity {
+        val imageUrl = model.image?.url ?: if (!model.referenceImageId.isNullOrBlank()) {
+            "https://cdn2.thecatapi.com/images/${model.referenceImageId}.jpg"
+        } else null
 
-    override fun mapTo(modelList: List<BreedModel>): List<BreedEntity> = modelList.map(::mapTo)
+        return BreedEntity(
+            id = model.id,
+            name = model.name,
+            imageUrl = imageUrl
+        )
+    }
+
+    override fun mapTo(modelList: List<BreedModel>): List<BreedEntity> =
+        modelList.map(::mapTo)
 }
