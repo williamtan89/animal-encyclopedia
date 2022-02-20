@@ -27,6 +27,10 @@ class PromotedViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Fetch a list of supported animal type and display them in the list. Then fetch recent
+     * promoted list of breeds of the animal type and update them in the list.
+     */
     private suspend fun loadAnimalType() = getAnimalTypeList()
         .onStart { uiState.emit(ScreenState.Loading) }
         .catch {
@@ -34,6 +38,7 @@ class PromotedViewModel @Inject constructor(
             uiState.emit(ScreenState.Error(it.stackTraceToString()))
         }
         .collect { animalTypeList ->
+            // start displaying list of supported animal type
             if (animalTypeList.isEmpty()) {
                 uiState.emit(ScreenState.Empty)
             } else {
@@ -46,21 +51,29 @@ class PromotedViewModel @Inject constructor(
                     }.toMap()
                 )
 
-                // fetch recent breeds for current animal type and update them
-                animalTypeList.forEach { animalType ->
-                    getAnimalTypeWithPromotedBreeds(animalType).collect { recentBreeds ->
-                        dataMap.tryEmit(
-                            dataMap.value + mapOf(
-                                animalType to PromotedBreedsEntity(
-                                    animalType,
-                                    recentBreeds
-                                )
-                            )
-                        )
-                    }
+                // fetch promoted breeds for each supported animal type
+                animalTypeList.forEach {
+                    loadPromotedAnimalType(it)
                 }
             }
         }
+
+    private suspend fun loadPromotedAnimalType(animalType: AnimalType) =
+        getAnimalTypeWithPromotedBreeds(animalType)
+            .catch {
+                // do nothing
+            }
+            .collect { recentBreeds ->
+                // update dataMap with updated recent breeds
+                dataMap.emit(
+                    dataMap.value + mapOf(
+                        animalType to PromotedBreedsEntity(
+                            animalType,
+                            recentBreeds
+                        )
+                    )
+                )
+            }
 
     sealed class ScreenState {
         object Loading : ScreenState()

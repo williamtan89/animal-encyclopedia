@@ -11,16 +11,15 @@ class GetAnimalTypeWithPromotedBreeds(
     private val dogRepository: DogRepository
 ) {
     suspend operator fun invoke(
-        animalType: AnimalType,
-        breedIdList: List<String>? = null
+        animalType: AnimalType
     ): Flow<List<BreedEntity>> = when (animalType) {
         AnimalType.Cat -> catRepository.getCatBreedList(
-            breedIdList,
+            null,
             10,
             0
         )
         AnimalType.Dog -> dogRepository.getDogBreedList(
-            breedIdList,
+            null,
             10,
             0
         )
