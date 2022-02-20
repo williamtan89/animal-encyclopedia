@@ -1,7 +1,7 @@
 package com.williamtan.favorite.data.repository
 
-import com.williamtan.common.entity.BreedEntity
-import com.williamtan.domain.repository.FavoriteRepository
+import com.williamtan.animalencyclopedia.favorite.domain.repository.FavoriteRepository
+import com.williamtan.common.entity.AnimalBreedEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.update
 
 internal class FavoriteRepositoryImpl : FavoriteRepository {
     // in-memory datasource
-    private val favoriteList = MutableStateFlow<List<BreedEntity>>(emptyList())
+    private val favoriteList = MutableStateFlow<List<AnimalBreedEntity>>(emptyList())
 
-    override suspend fun addToFavorite(breedEntity: BreedEntity) {
+    override suspend fun addToFavorite(breedEntity: AnimalBreedEntity) {
         favoriteList.update { it + breedEntity }
     }
 
@@ -19,7 +19,7 @@ internal class FavoriteRepositoryImpl : FavoriteRepository {
         favoriteList.update { it.filter { it.id != breedEntityId } }
     }
 
-    override suspend fun favoriteList(): Flow<List<BreedEntity>> {
+    override suspend fun favoriteList(): Flow<List<AnimalBreedEntity>> {
         return favoriteList
     }
 

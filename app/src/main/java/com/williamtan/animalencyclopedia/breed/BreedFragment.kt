@@ -15,7 +15,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.williamtan.animalencyclopedia.R
-import com.williamtan.animalencyclopedia.adapter.BreedAdapter
+import com.williamtan.animalencyclopedia.breed.adapter.BreedAdapter
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedBinding
 import com.williamtan.animalencyclopedia.view.GridItemDecoration
@@ -120,7 +120,7 @@ class BreedFragment : Fragment() {
                         is BreedViewModel.ScreenState.Loading -> {
                             stateBinding.layoutScreenState.isVisible = true
                             stateBinding.tvState.text = resources.getString(R.string.loading_state)
-                            viewModel.breedEntityData.value.isEmpty()
+                            viewModel.breedData.value.isEmpty()
                         }
 
                         is BreedViewModel.ScreenState.Success -> {
@@ -134,7 +134,7 @@ class BreedFragment : Fragment() {
         // start collecting breed list data fow
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.breedEntityData.collect {
+                viewModel.breedData.collect {
                     adapter.submitList(it)
                 }
             }

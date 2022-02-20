@@ -9,7 +9,14 @@ rootProject.name = "AnimalEncyclopedia"
 include ':app'
 include ':domain'
 include ':common'
-include ':cat:data'
-include ':dog:data'
-include ':favorite:data'
 include ':network'
+
+include ':cat:data'
+include ':cat:domain'
+
+include ':dog:data'
+include ':dog:domain'
+
+include ':favorite:data'
+include ':favorite:domain:'
+

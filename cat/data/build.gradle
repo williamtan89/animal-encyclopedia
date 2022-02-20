@@ -24,8 +24,9 @@ dependencies {
     kapt 'com.google.dagger:hilt-compiler:2.40.5'
 
     implementation project(':network')
-    implementation project(':domain')
     implementation project(':common')
+
+    implementation project(':cat:domain')
 
     // test
     testImplementation 'junit:junit:4.+'

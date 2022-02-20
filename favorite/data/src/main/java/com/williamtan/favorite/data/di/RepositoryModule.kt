@@ -1,6 +1,6 @@
 package com.williamtan.favorite.data.di
 
-import com.williamtan.domain.repository.FavoriteRepository
+import com.williamtan.animalencyclopedia.favorite.domain.repository.FavoriteRepository
 import com.williamtan.favorite.data.repository.FavoriteRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -13,6 +13,6 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideCatRepository(
+    fun provideFavoriteRepository(
     ): FavoriteRepository = FavoriteRepositoryImpl()
 }

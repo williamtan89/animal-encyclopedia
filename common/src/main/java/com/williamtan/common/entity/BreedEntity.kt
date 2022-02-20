@@ -2,14 +2,14 @@ package com.williamtan.common.entity
 
 import com.williamtan.common.enumtype.AnimalType
 
-data class BreedEntity(
-    val id: String,
-    val name: String,
-    val imageUrl: String?,
-    val animalType: AnimalType,
-    val temperamentList: List<String>,
-    val wikipediaUrl: String?,
-    val energyLevel: Int,
-    val description: String,
-    val isFavorite: Boolean = false
+abstract class AnimalBreedEntity(
+    open val id: String,
+    open val name: String,
+    open val imageUrl: String?,
+    open val animalType: AnimalType,
+    open val temperamentList: List<String>,
+    open val wikipediaUrl: String?,
+    open val energyLevel: Int,
+    open val description: String,
+    open val isFavorite: Boolean,
 )

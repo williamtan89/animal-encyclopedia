@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/list_item_promoted_breeds" />
+            tools:listitem="@layout/list_item_animal_type_with_promoted_breeds" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <include layout="@layout/common_screen_state" />

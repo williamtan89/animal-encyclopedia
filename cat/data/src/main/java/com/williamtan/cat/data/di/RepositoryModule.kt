@@ -1,8 +1,8 @@
 package com.williamtan.cat.data.di
 
 import com.williamtan.cat.data.CatApi
-import com.williamtan.cat.data.mapper.BreedMapper
-import com.williamtan.domain.repository.CatRepository
+import com.williamtan.cat.data.mapper.CatBreedMapper
+import com.williamtan.animalencyclopedia.cat.domain.repository.CatRepository
 import com.williamtan.cat.data.repository.CatRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -17,9 +17,9 @@ object RepositoryModule {
     @Singleton
     fun provideCatRepository(
         catApi: CatApi,
-        breedMapper: BreedMapper
+        catBreedMapper: CatBreedMapper
     ): CatRepository = CatRepositoryImpl(
         catApi,
-        breedMapper
+        catBreedMapper
     )
 }

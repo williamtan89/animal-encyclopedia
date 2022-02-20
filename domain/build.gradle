@@ -16,6 +16,9 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
 
     implementation project(':common')
+    implementation project(':favorite:domain')
+    implementation project(':cat:domain')
+    implementation project(':dog:domain')
 }
 
 kapt {

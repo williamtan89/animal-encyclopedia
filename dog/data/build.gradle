@@ -24,7 +24,8 @@ dependencies {
     implementation 'com.google.dagger:hilt-core:2.40.5'
     kapt 'com.google.dagger:hilt-compiler:2.40.5'
 
-    implementation project(':domain')
+    implementation project(':dog:domain')
+
     implementation project(':common')
 }
 

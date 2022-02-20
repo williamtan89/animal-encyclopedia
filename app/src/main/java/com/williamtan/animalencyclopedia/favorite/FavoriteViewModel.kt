@@ -2,18 +2,21 @@ package com.williamtan.animalencyclopedia.favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.williamtan.common.entity.BreedEntity
-import com.williamtan.domain.usecase.favorite.GetFavoriteList
+import com.williamtan.animalencyclopedia.breed.mapper.BreedMapper
+import com.williamtan.animalencyclopedia.breed.model.Breed
+import com.williamtan.animalencyclopedia.favorite.domain.usecase.GetFavoriteList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val getFavoriteList: GetFavoriteList
+    private val getFavoriteList: GetFavoriteList,
+    private val breedMapper: BreedMapper
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
 
@@ -29,7 +32,9 @@ class FavoriteViewModel @Inject constructor(
             .catch {
                 it.printStackTrace()
                 uiState.emit(ScreenState.Error(it.stackTraceToString()))
-            }.collect { favoriteList ->
+            }
+            .map(breedMapper::map)
+            .collect { favoriteList ->
                 if (favoriteList.isEmpty()) {
                     uiState.emit(ScreenState.Empty)
                 } else {
@@ -42,6 +47,6 @@ class FavoriteViewModel @Inject constructor(
         object Loading : ScreenState()
         object Empty : ScreenState()
         data class Error(val error: String) : ScreenState()
-        data class Success(val favoriteList: List<BreedEntity>) : ScreenState()
+        data class Success(val favoriteList: List<Breed>) : ScreenState()
     }
 }

@@ -2,13 +2,16 @@ package com.williamtan.animalencyclopedia.promoted
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.williamtan.animalencyclopedia.adapter.PromotedBreedsAdapter
+import com.williamtan.animalencyclopedia.cat.domain.animaltype.usecase.GetAnimalTypeList
+import com.williamtan.animalencyclopedia.cat.domain.animaltype.usecase.GetAnimalTypeWithPromotedBreeds
+import com.williamtan.animalencyclopedia.promoted.adapter.AnimalTypeWithPromotedBreedsAdapter
+import com.williamtan.animalencyclopedia.promoted.mapper.PromotedBreedMapper
+import com.williamtan.animalencyclopedia.promoted.model.AnimalTypeWithPromotedBreeds
 import com.williamtan.common.enumtype.AnimalType
-import com.williamtan.domain.usecase.animaltype.GetAnimalTypeList
-import com.williamtan.domain.usecase.animaltype.GetAnimalTypeWithPromotedBreeds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,10 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class PromotedViewModel @Inject constructor(
     private val getAnimalTypeList: GetAnimalTypeList,
-    private val getAnimalTypeWithPromotedBreeds: GetAnimalTypeWithPromotedBreeds
+    private val getAnimalTypeWithPromotedBreeds: GetAnimalTypeWithPromotedBreeds,
+    private val promotedBreedMapper: PromotedBreedMapper
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
-    val dataMap = MutableStateFlow<Map<AnimalType, PromotedBreeds>>(emptyMap())
+    val dataMap = MutableStateFlow<Map<AnimalType, AnimalTypeWithPromotedBreeds>>(emptyMap())
 
     init {
         viewModelScope.launch {
@@ -47,9 +51,9 @@ class PromotedViewModel @Inject constructor(
                 // set initial dataMap value
                 dataMap.emit(
                     animalTypeList.map {
-                        it to PromotedBreeds(
+                        it to AnimalTypeWithPromotedBreeds(
                             it,
-                            PromotedBreedsAdapter.PromotedBreedsItemState.Loading
+                            AnimalTypeWithPromotedBreedsAdapter.PromotedBreedsItemState.Loading
                         )
                     }.toMap()
                 )
@@ -65,10 +69,10 @@ class PromotedViewModel @Inject constructor(
         getAnimalTypeWithPromotedBreeds(animalType)
             .onStart {
                 val promotedBreedWithLoadingState = dataMap.value[animalType]?.copy(
-                    promotedBreedsItemState = PromotedBreedsAdapter.PromotedBreedsItemState.Loading
-                ) ?: PromotedBreeds(
+                    promotedBreedsItemState = AnimalTypeWithPromotedBreedsAdapter.PromotedBreedsItemState.Loading
+                ) ?: AnimalTypeWithPromotedBreeds(
                     animalType,
-                    PromotedBreedsAdapter.PromotedBreedsItemState.Loading
+                    AnimalTypeWithPromotedBreedsAdapter.PromotedBreedsItemState.Loading
                 )
 
                 dataMap.emit(
@@ -80,20 +84,21 @@ class PromotedViewModel @Inject constructor(
             .catch {
                 dataMap.emit(
                     dataMap.value + mapOf(
-                        animalType to PromotedBreeds(
+                        animalType to AnimalTypeWithPromotedBreeds(
                             animalType,
-                            PromotedBreedsAdapter.PromotedBreedsItemState.Error
+                            AnimalTypeWithPromotedBreedsAdapter.PromotedBreedsItemState.Error
                         )
                     )
                 )
             }
+            .map(promotedBreedMapper::map)
             .collect { recentBreeds ->
                 // update dataMap with updated recent breeds
                 dataMap.emit(
                     dataMap.value + mapOf(
-                        animalType to PromotedBreeds(
+                        animalType to AnimalTypeWithPromotedBreeds(
                             animalType,
-                            PromotedBreedsAdapter.PromotedBreedsItemState.Ready(
+                            AnimalTypeWithPromotedBreedsAdapter.PromotedBreedsItemState.Ready(
                                 recentBreeds
                             )
                         )

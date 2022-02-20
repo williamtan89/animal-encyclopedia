@@ -17,10 +17,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.chip.Chip
 import com.williamtan.animalencyclopedia.R
+import com.williamtan.animalencyclopedia.breeddetail.model.BreedDetail
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedDetailBinding
-import com.williamtan.animalencyclopedia.promoted.PromotedViewModel
-import com.williamtan.common.entity.BreedEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -77,7 +76,7 @@ class BreedDetailFragment : Fragment() {
 
                         is BreedDetailViewModel.ScreenState.Success -> {
                             stateBinding.layoutScreenState.isVisible = false
-                            updateUi(it.breed)
+                            updateUi(it.data)
                         }
                     }
                 }
@@ -85,17 +84,18 @@ class BreedDetailFragment : Fragment() {
         }
     }
 
-    private fun updateUi(breed: BreedEntity) {
-        binding.tvBreedId.text = resources.getString(R.string.breed_detail_id, breed.id.uppercase())
-        binding.tvBreedName.text = breed.name
+    private fun updateUi(breedDetail: BreedDetail) {
+        binding.tvBreedId.text =
+            resources.getString(R.string.breed_detail_id, breedDetail.id.uppercase())
+        binding.tvBreedName.text = breedDetail.name
 
-        binding.tvBreedDesc.isVisible = breed.description.isNotBlank()
-        binding.tvBreedDesc.text = breed.description
+        binding.tvBreedDesc.isVisible = breedDetail.description.isNotBlank()
+        binding.tvBreedDesc.text = breedDetail.description
 
         // clear existing chips, if any
-        binding.layoutTemperament.isVisible = breed.temperamentList.isNotEmpty()
+        binding.layoutTemperament.isVisible = breedDetail.temperamentList.isNotEmpty()
         binding.cgTemperament.removeAllViews()
-        breed.temperamentList.forEach { temperament ->
+        breedDetail.temperamentList.forEach { temperament ->
             val newChip = Chip(context).apply {
                 text = temperament
                 setEnsureMinTouchTargetSize(false)
@@ -105,20 +105,21 @@ class BreedDetailFragment : Fragment() {
             binding.cgTemperament.addView(newChip)
         }
 
-        binding.layoutEnergy.isVisible = breed.energyLevel > 0
+        binding.layoutEnergy.isVisible = breedDetail.energyLevel > 0
         binding.tvEnergyLevel.text = resources.getString(
             R.string.breed_detail_energy_level,
-            breed.energyLevel
+            breedDetail.energyLevel
         )
-        binding.pbEnergyLevel.progress = (breed.energyLevel / MAXIMUM_ENERGY_LEVEL * 100).toInt()
+        binding.pbEnergyLevel.progress =
+            (breedDetail.energyLevel / MAXIMUM_ENERGY_LEVEL * 100).toInt()
 
         Glide.with(this)
-            .load(breed.imageUrl)
+            .load(breedDetail.imageUrl)
             .placeholder(R.drawable.ic_placeholder_48)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(binding.ivToolbar)
 
-        if (!breed.isFavorite) {
+        if (!breedDetail.isFavorite) {
             binding.btnFavorite.text = resources.getString(R.string.add_to_favorite)
         } else {
             binding.btnFavorite.text = resources.getString(R.string.remove_from_favorite)
@@ -126,15 +127,15 @@ class BreedDetailFragment : Fragment() {
 
         binding.btnFavorite.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.onFavoriteButtonClick(breed)
+                viewModel.onFavoriteButtonClick(breedDetail)
             }
         }
 
-        binding.btnReadMore.isVisible = !breed.wikipediaUrl.isNullOrBlank()
+        binding.btnReadMore.isVisible = !breedDetail.wikipediaUrl.isNullOrBlank()
         binding.btnReadMore.setOnClickListener {
             val defaultBrowser =
                 Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
-            defaultBrowser.data = Uri.parse(breed.wikipediaUrl)
+            defaultBrowser.data = Uri.parse(breedDetail.wikipediaUrl)
             startActivity(defaultBrowser)
         }
     }

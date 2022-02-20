@@ -3,15 +3,17 @@ package com.williamtan.animalencyclopedia.breed
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.williamtan.common.entity.BreedEntity
+import com.williamtan.animalencyclopedia.breed.mapper.BreedMapper
+import com.williamtan.animalencyclopedia.breed.model.Breed
+import com.williamtan.animalencyclopedia.cat.domain.breed.usecase.GetBreeds
+import com.williamtan.animalencyclopedia.cat.domain.breed.usecase.SearchBreedsByName
 import com.williamtan.common.enumtype.AnimalType
-import com.williamtan.domain.usecase.breed.GetBreeds
-import com.williamtan.domain.usecase.breed.SearchBreedsByName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
@@ -22,10 +24,11 @@ import javax.inject.Inject
 class BreedViewModel @Inject constructor(
     private val getBreeds: GetBreeds,
     private val searchBreedsByName: SearchBreedsByName,
+    private val breedMapper: BreedMapper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
-    val breedEntityData = MutableStateFlow<List<BreedEntity>>(emptyList())
+    val breedData = MutableStateFlow<List<Breed>>(emptyList())
     val searchQuery = MutableStateFlow("")
 
     private var currentPage = 0
@@ -46,7 +49,7 @@ class BreedViewModel @Inject constructor(
                 }
                 .onEach {
                     if (it.isBlank()) {
-                        breedEntityData.value = emptyList()
+                        breedData.value = emptyList()
                         loadBreeds(animalType)
                     } else {
                         searchBreedByName(animalType, it)
@@ -70,12 +73,14 @@ class BreedViewModel @Inject constructor(
             .catch {
                 it.printStackTrace()
                 uiState.emit(ScreenState.Error(it.stackTraceToString()))
-            }.collect { breeds ->
-                if (breedEntityData.value.isEmpty() && breeds.isEmpty()) {
+            }
+            .map(breedMapper::map)
+            .collect { breeds ->
+                if (breedData.value.isEmpty() && breeds.isEmpty()) {
                     uiState.emit(ScreenState.Empty)
                 } else {
                     uiState.emit(ScreenState.Success)
-                    breedEntityData.emit(breeds)
+                    breedData.emit(breeds)
                 }
             }
     }
@@ -90,13 +95,15 @@ class BreedViewModel @Inject constructor(
             .catch {
                 it.printStackTrace()
                 uiState.emit(ScreenState.Error(it.stackTraceToString()))
-            }.collect { breeds ->
-                if (breedEntityData.value.isEmpty() && breeds.isEmpty()) {
+            }
+            .map(breedMapper::map)
+            .collect { breeds ->
+                if (breedData.value.isEmpty() && breeds.isEmpty()) {
                     uiState.emit(ScreenState.Empty)
                 } else {
                     reachedEnd = breeds.isEmpty()
                     uiState.emit(ScreenState.Success)
-                    breedEntityData.emit(breedEntityData.value + breeds)
+                    breedData.emit(breedData.value + breeds)
                     currentPage++
                 }
             }

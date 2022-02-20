@@ -12,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.williamtan.animalencyclopedia.R
-import com.williamtan.animalencyclopedia.adapter.PromotedBreedsAdapter
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentPromotedBinding
 import com.williamtan.animalencyclopedia.home.HomeFragmentDirections
+import com.williamtan.animalencyclopedia.promoted.adapter.AnimalTypeWithPromotedBreedsAdapter
 import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class PromotedFragment : Fragment() {
     private val viewModel: PromotedViewModel by viewModels()
     private lateinit var binding: FragmentPromotedBinding
     private lateinit var stateBinding: CommonScreenStateBinding
-    private lateinit var adapter: PromotedBreedsAdapter
+    private lateinit var adapter: AnimalTypeWithPromotedBreedsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +41,7 @@ class PromotedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PromotedBreedsAdapter(onAnimalTypeClick, onPromotedBreedClick)
+        adapter = AnimalTypeWithPromotedBreedsAdapter(onAnimalTypeClick, onPromotedBreedClick)
         binding.rvPromoted.adapter = adapter
 
         binding.srlPromoted.setOnRefreshListener {

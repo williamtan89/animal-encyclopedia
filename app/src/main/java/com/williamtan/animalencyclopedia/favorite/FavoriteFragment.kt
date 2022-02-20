@@ -12,12 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.williamtan.animalencyclopedia.R
-import com.williamtan.animalencyclopedia.adapter.BreedAdapter
+import com.williamtan.animalencyclopedia.breed.adapter.BreedAdapter
+import com.williamtan.animalencyclopedia.breed.model.Breed
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentFavoriteBinding
 import com.williamtan.animalencyclopedia.home.HomeFragmentDirections
 import com.williamtan.animalencyclopedia.view.GridItemDecoration
-import com.williamtan.common.entity.BreedEntity
 import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -73,7 +73,7 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-    private fun updateUi(favoriteList: List<BreedEntity>) {
+    private fun updateUi(favoriteList: List<Breed>) {
         // setup breed list
         adapter = BreedAdapter(onBreedClick)
 
