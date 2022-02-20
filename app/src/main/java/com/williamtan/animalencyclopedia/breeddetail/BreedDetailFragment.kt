@@ -19,6 +19,7 @@ import com.google.android.material.chip.Chip
 import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentBreedDetailBinding
+import com.williamtan.animalencyclopedia.promoted.PromotedViewModel
 import com.williamtan.common.entity.BreedEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -60,28 +61,22 @@ class BreedDetailFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is BreedDetailViewModel.ScreenState.Empty -> {
-                            stateBinding.layoutEmptyState.isVisible = true
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.empty_state)
                         }
 
                         is BreedDetailViewModel.ScreenState.Error -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = true
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.error_state)
                         }
 
                         is BreedDetailViewModel.ScreenState.Loading -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = true
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.loading_state)
                         }
 
                         is BreedDetailViewModel.ScreenState.Success -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
-
+                            stateBinding.layoutScreenState.isVisible = false
                             updateUi(it.breed)
                         }
                     }

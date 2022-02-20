@@ -9,7 +9,10 @@
     <string name="read_more">Read more</string>
     <string name="add_to_favorite">Add to favorite</string>
     <string name="remove_from_favorite">Remove from favorite</string>
-    <string name="error_state">…Meow? (Where is my food)</string>
-    <string name="empty_state">Meow meow (Nothing to see here)</string>
-    <string name="loading_state">Meow meow (Meow)</string>
+    <string name="error_state">…Meow?\n(Service unavailable, please try again later)</string>
+    <string name="empty_state">Meow meow\n(Nothing to see here)</string>
+    <string name="loading_state">Meow\n(Please wait)</string>
+    <string name="promoted_breeds_error_state">Service unavailable, please try again later</string>
+    <string name="promoted_breeds_empty_state">No breeds being promoted yet</string>
+    <string name="promoted_breeds_loading_state">Loading</string>
 </resources>

@@ -2,7 +2,7 @@ package com.williamtan.animalencyclopedia.promoted
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.williamtan.common.entity.PromotedBreedsEntity
+import com.williamtan.animalencyclopedia.adapter.PromotedBreedsAdapter
 import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.usecase.animaltype.GetAnimalTypeList
 import com.williamtan.domain.usecase.animaltype.GetAnimalTypeWithPromotedBreeds
@@ -19,7 +19,7 @@ class PromotedViewModel @Inject constructor(
     private val getAnimalTypeWithPromotedBreeds: GetAnimalTypeWithPromotedBreeds
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
-    val dataMap = MutableStateFlow<Map<AnimalType, PromotedBreedsEntity>>(emptyMap())
+    val dataMap = MutableStateFlow<Map<AnimalType, PromotedBreeds>>(emptyMap())
 
     init {
         viewModelScope.launch {
@@ -31,7 +31,7 @@ class PromotedViewModel @Inject constructor(
      * Fetch a list of supported animal type and display them in the list. Then fetch recent
      * promoted list of breeds of the animal type and update them in the list.
      */
-    private suspend fun loadAnimalType() = getAnimalTypeList()
+    suspend fun loadAnimalType() = getAnimalTypeList()
         .onStart { uiState.emit(ScreenState.Loading) }
         .catch {
             it.printStackTrace()
@@ -47,7 +47,10 @@ class PromotedViewModel @Inject constructor(
                 // set initial dataMap value
                 dataMap.emit(
                     animalTypeList.map {
-                        it to PromotedBreedsEntity(it, emptyList())
+                        it to PromotedBreeds(
+                            it,
+                            PromotedBreedsAdapter.PromotedBreedsItemState.Loading
+                        )
                     }.toMap()
                 )
 
@@ -60,16 +63,39 @@ class PromotedViewModel @Inject constructor(
 
     private suspend fun loadPromotedAnimalType(animalType: AnimalType) =
         getAnimalTypeWithPromotedBreeds(animalType)
+            .onStart {
+                val promotedBreedWithLoadingState = dataMap.value[animalType]?.copy(
+                    promotedBreedsItemState = PromotedBreedsAdapter.PromotedBreedsItemState.Loading
+                ) ?: PromotedBreeds(
+                    animalType,
+                    PromotedBreedsAdapter.PromotedBreedsItemState.Loading
+                )
+
+                dataMap.emit(
+                    dataMap.value + mapOf(
+                        animalType to promotedBreedWithLoadingState
+                    )
+                )
+            }
             .catch {
-                // do nothing
+                dataMap.emit(
+                    dataMap.value + mapOf(
+                        animalType to PromotedBreeds(
+                            animalType,
+                            PromotedBreedsAdapter.PromotedBreedsItemState.Error
+                        )
+                    )
+                )
             }
             .collect { recentBreeds ->
                 // update dataMap with updated recent breeds
                 dataMap.emit(
                     dataMap.value + mapOf(
-                        animalType to PromotedBreedsEntity(
+                        animalType to PromotedBreeds(
                             animalType,
-                            recentBreeds
+                            PromotedBreedsAdapter.PromotedBreedsItemState.Ready(
+                                recentBreeds
+                            )
                         )
                     )
                 )

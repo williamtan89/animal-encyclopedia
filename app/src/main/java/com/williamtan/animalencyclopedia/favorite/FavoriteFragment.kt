@@ -49,28 +49,22 @@ class FavoriteFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is FavoriteViewModel.ScreenState.Empty -> {
-                            stateBinding.layoutEmptyState.isVisible = true
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.empty_state)
                         }
 
                         is FavoriteViewModel.ScreenState.Error -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = true
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.error_state)
                         }
 
                         is FavoriteViewModel.ScreenState.Loading -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = true
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.loading_state)
                         }
 
                         is FavoriteViewModel.ScreenState.Success -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
-
+                            stateBinding.layoutScreenState.isVisible = false
                             updateUi(it.favoriteList)
                         }
                     }

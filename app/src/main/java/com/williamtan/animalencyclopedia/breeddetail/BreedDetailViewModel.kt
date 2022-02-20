@@ -31,6 +31,8 @@ class BreedDetailViewModel @Inject constructor(
 
             if (breedId != null && animalType != null) {
                 loadBreedDetail(animalType, breedId)
+            } else {
+                uiState.emit(ScreenState.Error("Invalid arguments"))
             }
         }
     }

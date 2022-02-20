@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_animal_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -15,22 +15,58 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:drawableEndCompat="@drawable/ic_front_24"
+        app:layout_constraintBottom_toTopOf="@+id/rv_recent_breeds"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tool:text="Cat" />
+        tool:text="@tools:sample/first_names" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recent_breeds"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:clipToPadding="false"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_min="160dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_animal_type"
         tool:itemCount="3"
         tool:listitem="@layout/list_item_breed" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_state"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/rv_recent_breeds"
+        app:layout_constraintEnd_toEndOf="@+id/rv_recent_breeds"
+        app:layout_constraintStart_toStartOf="@+id/rv_recent_breeds"
+        app:layout_constraintTop_toTopOf="@+id/rv_recent_breeds">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/pb_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateOnly="true"
+            app:layout_constraintBottom_toTopOf="@+id/tv_state"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:text="is loading..."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pb_loading" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,6 @@ import com.williamtan.common.enumtype.AnimalType
 import com.williamtan.domain.usecase.breed.GetBreeds
 import com.williamtan.domain.usecase.breed.SearchBreedsByName
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
@@ -27,7 +26,7 @@ class BreedViewModel @Inject constructor(
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
     val breedEntityData = MutableStateFlow<List<BreedEntity>>(emptyList())
-    val searchQuery = MutableSharedFlow<String?>()
+    val searchQuery = MutableStateFlow("")
 
     private var currentPage = 0
     private var reachedEnd = false
@@ -41,26 +40,28 @@ class BreedViewModel @Inject constructor(
                 loadBreeds(animalType)
             }
 
+            searchQuery
+                .onEach {
+                    isSearching = it.isNotBlank()
+                }
+                .onEach {
+                    if (it.isBlank()) {
+                        breedEntityData.value = emptyList()
+                        loadBreeds(animalType)
+                    } else {
+                        searchBreedByName(animalType, it)
+                    }
+                }
+                .debounce(500)
+                .shareIn(viewModelScope, SharingStarted.Eagerly)
+        } else {
             viewModelScope.launch {
-                searchQuery
-                    .onEach {
-                        isSearching = !it.isNullOrBlank()
-                    }
-                    .onEach {
-                        if (it.isNullOrBlank()) {
-                            breedEntityData.value = emptyList()
-                            loadBreeds(animalType)
-                        } else {
-                            searchBreedByName(animalType, it)
-                        }
-                    }
-                    .debounce(500)
-                    .shareIn(this, SharingStarted.Eagerly)
+                uiState.emit(ScreenState.Error("Invalid arguments"))
             }
         }
     }
 
-    suspend fun searchBreedByName(animalType: AnimalType, query: String) {
+    private suspend fun searchBreedByName(animalType: AnimalType, query: String) {
         currentPage = 0
         reachedEnd = false
 

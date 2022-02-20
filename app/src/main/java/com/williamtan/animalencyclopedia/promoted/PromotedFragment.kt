@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
+import com.williamtan.animalencyclopedia.R
 import com.williamtan.animalencyclopedia.adapter.PromotedBreedsAdapter
 import com.williamtan.animalencyclopedia.databinding.CommonScreenStateBinding
 import com.williamtan.animalencyclopedia.databinding.FragmentPromotedBinding
@@ -43,32 +44,35 @@ class PromotedFragment : Fragment() {
         adapter = PromotedBreedsAdapter(onAnimalTypeClick, onPromotedBreedClick)
         binding.rvPromoted.adapter = adapter
 
+        binding.srlPromoted.setOnRefreshListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.loadAnimalType()
+            }
+
+            binding.srlPromoted.isRefreshing = false // hides default ui immediately
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
                         is PromotedViewModel.ScreenState.Empty -> {
-                            stateBinding.layoutEmptyState.isVisible = true
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.empty_state)
                         }
 
                         is PromotedViewModel.ScreenState.Error -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = true
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.error_state)
                         }
 
                         is PromotedViewModel.ScreenState.Loading -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = true
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.loading_state)
                         }
 
                         is PromotedViewModel.ScreenState.Success -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = false
                         }
                     }
                 }

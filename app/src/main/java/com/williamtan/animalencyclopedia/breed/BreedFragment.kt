@@ -21,7 +21,6 @@ import com.williamtan.animalencyclopedia.databinding.FragmentBreedBinding
 import com.williamtan.animalencyclopedia.view.GridItemDecoration
 import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 
@@ -91,8 +90,12 @@ class BreedFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (binding.svBreed.isIconified) {
+                    return true
+                }
+
                 viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.searchQuery.emit(newText)
+                    viewModel.searchQuery.emit(newText ?: "")
                 }
 
                 return true
@@ -105,28 +108,23 @@ class BreedFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is BreedViewModel.ScreenState.Empty -> {
-                            stateBinding.layoutEmptyState.isVisible = true
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.empty_state)
                         }
 
                         is BreedViewModel.ScreenState.Error -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = true
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.error_state)
                         }
 
                         is BreedViewModel.ScreenState.Loading -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible =
-                                viewModel.breedEntityData.value.isEmpty()
+                            stateBinding.layoutScreenState.isVisible = true
+                            stateBinding.tvState.text = resources.getString(R.string.loading_state)
+                            viewModel.breedEntityData.value.isEmpty()
                         }
 
                         is BreedViewModel.ScreenState.Success -> {
-                            stateBinding.layoutEmptyState.isVisible = false
-                            stateBinding.layoutErrorState.isVisible = false
-                            stateBinding.layoutLoadingState.isVisible = false
+                            stateBinding.layoutScreenState.isVisible = false
                         }
                     }
                 }
