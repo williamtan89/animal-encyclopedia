@@ -64,15 +64,11 @@ dependencies {
 
     // multi-modules setup
     implementation project(':common')
-    implementation project(':domain')
-
+    implementation project(':animal-type')
     implementation project(':cat:data')
     implementation project(':cat:domain')
-
     implementation project(':dog:data')
     implementation project(':dog:domain')
-
-    // favorite module setup
     implementation project(':favorite:data')
     implementation project(':favorite:domain')
 

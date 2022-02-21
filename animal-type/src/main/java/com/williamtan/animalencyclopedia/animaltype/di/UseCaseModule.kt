@@ -1,6 +1,6 @@
-package com.williamtan.animalencyclopedia.cat.domain.di
+package com.williamtan.animalencyclopedia.animaltype.di
 
-import com.williamtan.animalencyclopedia.cat.domain.animaltype.usecase.GetAnimalTypeList
+import com.williamtan.animalencyclopedia.animaltype.usecase.GetAnimalTypeList
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

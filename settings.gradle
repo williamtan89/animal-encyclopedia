@@ -7,7 +7,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AnimalEncyclopedia"
 include ':app'
-include ':domain'
+include ':animal-type'
 include ':common'
 include ':network'
 

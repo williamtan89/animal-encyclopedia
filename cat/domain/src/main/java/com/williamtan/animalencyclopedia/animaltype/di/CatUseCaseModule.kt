@@ -1,4 +1,4 @@
-package com.williamtan.animalencyclopedia.cat.domain.di
+package com.williamtan.animalencyclopedia.animaltype.di
 
 import com.williamtan.animalencyclopedia.cat.domain.repository.CatRepository
 import com.williamtan.animalencyclopedia.cat.domain.usecase.GetCatBreedById

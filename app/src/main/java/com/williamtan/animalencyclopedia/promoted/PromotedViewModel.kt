@@ -2,7 +2,7 @@ package com.williamtan.animalencyclopedia.promoted
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.williamtan.animalencyclopedia.cat.domain.animaltype.usecase.GetAnimalTypeList
+import com.williamtan.animalencyclopedia.animaltype.usecase.GetAnimalTypeList
 import com.williamtan.animalencyclopedia.cat.domain.usecase.GetCatBreedList
 import com.williamtan.animalencyclopedia.dog.domain.usecase.GetDogBreedList
 import com.williamtan.animalencyclopedia.promoted.adapter.AnimalTypeWithPromotedBreedsAdapter
