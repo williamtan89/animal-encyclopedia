@@ -7,28 +7,35 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 internal class FavoriteRepositoryImpl : FavoriteRepository {
     // in-memory datasource
+    private val mutex = Mutex()
     private val favoriteList = MutableStateFlow<List<FavoriteBreedModel>>(emptyList())
 
     override suspend fun addToFavorite(entity: FavoriteBreedEntity) {
-        favoriteList.update {
-            it + FavoriteBreedModel(
-                id = entity.id,
-                name = entity.name,
-                imageUrl = entity.imageUrl,
-                animalType = entity.animalType,
-                temperamentList = entity.temperamentList,
-                wikipediaUrl = entity.wikipediaUrl,
-                energyLevel = entity.energyLevel,
-                description = entity.description
-            )
+        mutex.withLock {
+            favoriteList.update {
+                it + FavoriteBreedModel(
+                    id = entity.id,
+                    name = entity.name,
+                    imageUrl = entity.imageUrl,
+                    animalType = entity.animalType,
+                    temperamentList = entity.temperamentList,
+                    wikipediaUrl = entity.wikipediaUrl,
+                    energyLevel = entity.energyLevel,
+                    description = entity.description
+                )
+            }
         }
     }
 
     override suspend fun removeFromFavorite(breedEntityId: String) {
-        favoriteList.update { it.filter { it.id != breedEntityId } }
+        mutex.withLock {
+            favoriteList.update { it.filter { it.id != breedEntityId } }
+        }
     }
 
     override suspend fun favoriteList(): Flow<List<FavoriteBreedEntity>> {
