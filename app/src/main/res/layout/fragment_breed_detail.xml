@@ -36,7 +36,7 @@
                     tools:src="@tools:sample/backgrounds/scenic" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tb_breed"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -44,7 +44,7 @@
                 app:layout_collapseMode="pin"
                 app:layout_constraintTop_toTopOf="parent">
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -184,17 +184,17 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_read_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:background="@color/white"
+                android:backgroundTint="@color/white"
                 android:text="@string/read_more"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/btn_favorite" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_favorite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
