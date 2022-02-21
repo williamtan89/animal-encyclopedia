@@ -6,7 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.williamtan.animalencyclopedia.breed.mapper.BreedMapper
 import com.williamtan.animalencyclopedia.breed.model.Breed
 import com.williamtan.animalencyclopedia.cat.domain.breed.usecase.GetBreeds
-import com.williamtan.animalencyclopedia.cat.domain.breed.usecase.SearchBreedsByName
+import com.williamtan.animalencyclopedia.cat.domain.usecase.GetCatBreedByName
+import com.williamtan.animalencyclopedia.dog.domain.usecase.GetDogBreedByName
 import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BreedViewModel @Inject constructor(
     private val getBreeds: GetBreeds,
-    private val searchBreedsByName: SearchBreedsByName,
+    private val getCatBreedByName: GetCatBreedByName,
+    private val getDogBreedByName: GetDogBreedByName,
     private val breedMapper: BreedMapper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -68,7 +70,10 @@ class BreedViewModel @Inject constructor(
         currentPage = 0
         reachedEnd = false
 
-        searchBreedsByName(animalType, query)
+        when (animalType) {
+            AnimalType.Cat -> getCatBreedByName(query)
+            AnimalType.Dog -> getDogBreedByName(query)
+        }
             .onStart { uiState.emit(ScreenState.Loading) }
             .catch {
                 it.printStackTrace()

@@ -11,5 +11,5 @@ abstract class AnimalBreedEntity(
     open val wikipediaUrl: String?,
     open val energyLevel: Int,
     open val description: String,
-    open val isFavorite: Boolean,
+    open var isFavorite: Boolean,
 )

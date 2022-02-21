@@ -12,7 +12,7 @@ data class CatBreedEntity(
     override val wikipediaUrl: String?,
     override val energyLevel: Int,
     override val description: String,
-    override val isFavorite: Boolean = false
+    override var isFavorite: Boolean = false
 ) : AnimalBreedEntity(
     id,
     name,

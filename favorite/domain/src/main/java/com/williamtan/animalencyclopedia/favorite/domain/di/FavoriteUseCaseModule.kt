@@ -3,6 +3,7 @@ package com.williamtan.animalencyclopedia.favorite.domain.di
 import com.williamtan.animalencyclopedia.favorite.domain.repository.FavoriteRepository
 import com.williamtan.animalencyclopedia.favorite.domain.usecase.AddBreedToFavorite
 import com.williamtan.animalencyclopedia.favorite.domain.usecase.GetFavoriteList
+import com.williamtan.animalencyclopedia.favorite.domain.usecase.IsFavoriteBreed
 import com.williamtan.animalencyclopedia.favorite.domain.usecase.RemoveBreedFromFavorite
 import dagger.Module
 import dagger.Provides
@@ -26,4 +27,9 @@ class FavoriteUseCaseModule {
     fun provideRemoveBreedFromFavorite(
         repository: FavoriteRepository
     ) = RemoveBreedFromFavorite(repository)
+
+    @Provides
+    fun provideIsFavoriteBreed(
+        repository: FavoriteRepository
+    ) = IsFavoriteBreed(repository)
 }

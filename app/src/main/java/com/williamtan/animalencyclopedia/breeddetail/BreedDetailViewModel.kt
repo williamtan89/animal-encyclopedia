@@ -5,23 +5,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.williamtan.animalencyclopedia.breeddetail.mapper.BreedDetailMapper
 import com.williamtan.animalencyclopedia.breeddetail.model.BreedDetail
-import com.williamtan.animalencyclopedia.cat.domain.breed.usecase.GetBreedById
+import com.williamtan.animalencyclopedia.cat.domain.usecase.GetCatBreedById
+import com.williamtan.animalencyclopedia.dog.domain.usecase.GetDogBreedById
+import com.williamtan.animalencyclopedia.favorite.domain.model.FavoriteBreedEntity
 import com.williamtan.animalencyclopedia.favorite.domain.usecase.AddBreedToFavorite
+import com.williamtan.animalencyclopedia.favorite.domain.usecase.IsFavoriteBreed
 import com.williamtan.animalencyclopedia.favorite.domain.usecase.RemoveBreedFromFavorite
 import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BreedDetailViewModel @Inject constructor(
-    private val getBreedById: GetBreedById,
     private val addBreedToFavorite: AddBreedToFavorite,
     private val removeBreedFromFavorite: RemoveBreedFromFavorite,
     private val breedDetailMapper: BreedDetailMapper,
+    private val isFavoriteBreed: IsFavoriteBreed,
+    private val getDogBreedById: GetDogBreedById,
+    private val getCatBreedById: GetCatBreedById,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
@@ -48,35 +54,41 @@ class BreedDetailViewModel @Inject constructor(
         if (breedDetail.isFavorite) {
             removeBreedFromFavorite.invoke(breedDetail.id)
         } else {
-            /*addBreedToFavorite.invoke(
-                BreedEntity(
+            addBreedToFavorite(
+                FavoriteBreedEntity(
                     id = breedDetail.id,
                     name = breedDetail.name,
                     imageUrl = breedDetail.imageUrl,
-                    animalType = animalType,
+                    animalType = breedDetail.animalType,
                     temperamentList = breedDetail.temperamentList,
                     wikipediaUrl = breedDetail.wikipediaUrl,
                     energyLevel = breedDetail.energyLevel,
                     description = breedDetail.description
                 )
-            )*/
+            )
         }
     }
 
     private suspend fun loadBreedDetail(animalType: AnimalType, breedId: String) {
-        getBreedById(animalType, breedId)
+        when (animalType) {
+            AnimalType.Cat -> getCatBreedById(breedId)
+            AnimalType.Dog -> getDogBreedById(breedId)
+        }
+            .combine(isFavoriteBreed(breedId)) { breed, isFavorite ->
+                breed to isFavorite
+            }
             .onStart { uiState.emit(ScreenState.Loading) }
             .catch {
                 it.printStackTrace()
                 uiState.emit(ScreenState.Error(it.stackTraceToString()))
             }
-            .collect { breed ->
+            .collect { (breed, isFavorite) ->
                 if (breed == null) {
                     uiState.emit(ScreenState.Empty)
                 } else {
                     uiState.emit(
                         ScreenState.Success(
-                            breedDetailMapper.map(breed)
+                            breedDetailMapper.map(breed, isFavorite)
                         )
                     )
                 }

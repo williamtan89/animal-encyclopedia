@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.williamtan.animalencyclopedia.breed.mapper.BreedMapper
 import com.williamtan.animalencyclopedia.breed.model.Breed
+import com.williamtan.animalencyclopedia.cat.domain.usecase.GetCatBreedList
+import com.williamtan.animalencyclopedia.dog.domain.usecase.GetDogBreedList
 import com.williamtan.animalencyclopedia.favorite.domain.usecase.GetFavoriteList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
     private val getFavoriteList: GetFavoriteList,
+    private val getCatBreedList: GetCatBreedList,
+    private val getDogBreedList: GetDogBreedList,
     private val breedMapper: BreedMapper
 ) : ViewModel() {
     val uiState = MutableStateFlow<ScreenState>(ScreenState.Empty)
@@ -29,11 +33,11 @@ class FavoriteViewModel @Inject constructor(
     private suspend fun loadFavoriteList() {
         getFavoriteList()
             .onStart { uiState.emit(ScreenState.Loading) }
+            .map(breedMapper::mapFavoriteBreedEntityList)
             .catch {
                 it.printStackTrace()
                 uiState.emit(ScreenState.Error(it.stackTraceToString()))
             }
-            .map(breedMapper::map)
             .collect { favoriteList ->
                 if (favoriteList.isEmpty()) {
                     uiState.emit(ScreenState.Empty)
