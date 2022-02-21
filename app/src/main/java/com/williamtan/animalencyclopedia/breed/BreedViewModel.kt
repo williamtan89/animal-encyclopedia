@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.williamtan.animalencyclopedia.breed.mapper.BreedMapper
 import com.williamtan.animalencyclopedia.breed.model.Breed
-import com.williamtan.animalencyclopedia.cat.domain.breed.usecase.GetBreeds
 import com.williamtan.animalencyclopedia.cat.domain.usecase.GetCatBreedByName
+import com.williamtan.animalencyclopedia.cat.domain.usecase.GetCatBreedList
 import com.williamtan.animalencyclopedia.dog.domain.usecase.GetDogBreedByName
+import com.williamtan.animalencyclopedia.dog.domain.usecase.GetDogBreedList
 import com.williamtan.common.enumtype.AnimalType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,9 +24,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BreedViewModel @Inject constructor(
-    private val getBreeds: GetBreeds,
     private val getCatBreedByName: GetCatBreedByName,
+    private val getCatBreedList: GetCatBreedList,
     private val getDogBreedByName: GetDogBreedByName,
+    private val getDogBreedList: GetDogBreedList,
     private val breedMapper: BreedMapper,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -95,7 +97,10 @@ class BreedViewModel @Inject constructor(
         if (uiState.value is ScreenState.Loading) return
         if (isSearching) return
 
-        getBreeds(animalType, currentPage)
+        when (animalType) {
+            AnimalType.Cat -> getCatBreedList(null, 10, currentPage)
+            AnimalType.Dog -> getDogBreedList(null, 10, currentPage)
+        }
             .onStart { uiState.emit(ScreenState.Loading) }
             .catch {
                 it.printStackTrace()

@@ -25,7 +25,6 @@ dependencies {
 
     implementation project(':network')
     implementation project(':common')
-
     implementation project(':cat:domain')
 
     // test
